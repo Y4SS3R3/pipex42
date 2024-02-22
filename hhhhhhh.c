@@ -81,59 +81,56 @@ int main (int ac, char **av, char **env)
 	int end[2];
 	int id1;
 	int id2;
-	int fd;
 	int i = 0;
 
 	// if (ac < 5)
 	// 	exit(EXIT_FAILURE);
 	// if (!valid_file(av[1]) || !valid_file(av[4]))
 	// 	exit(EXIT_FAILURE);
-	command1 = ft_split(av[2], ' ');
-	command2 = ft_split(av[3], ' ');
+	command1 = ft_split(av[1], ' ');
+	command2 = ft_split(av[2], ' ');
 	path = extract_path(env);
 	potential_path = ft_split(path, ':');
 	binary1 = check_command(command1[0], potential_path);
 	binary2 = check_command(command2[0], potential_path);
 	if (!binary1 || !binary2)
 		exit(EXIT_FAILURE);
+	command1[0] = binary1;
+	command2[0] = binary2;
 	//free(paths); TODO++++++++
 	if (pipe(end) == -1)
 		exit(EXIT_FAILURE);
 	id1 = fork();
 	if (id1 == -1)
 		exit(EXIT_FAILURE);
-	if (id1)
-	id2 = fork();
-	if (id2 == -1)
-		exit(EXIT_FAILURE);
-	if (id1 != 0 && id2 != 0)
+	if (!id1)
+	{
+		puts("hello");
+	}
+	else
+	{
+		id2 = fork();
+		if (id2 == -1)
+			exit(EXIT_FAILURE);
+		if (!id2)
+			puts("w");
 		while (wait(NULL) != -1)
 			;
-	if (id1 != 0 && !id2)
-	{
-		fd = open(av[1], O_RDONLY | O_CREAT, 0666);
-		if (fd == -1)
-			exit(EXIT_FAILURE);
-		dup2(fd, 0);
-		close(end[0]);
-		dup2(end[1], 1);
-		close(end[1]);
-		close(fd);
-		execve(binary1, command1, env);
-		exit(EXIT_FAILURE);
 	}
-	if (!id1 && !id2)
-	{
-		fd = open(av[4], O_WRONLY | O_TRUNC | O_CREAT, 0666);
-		if (fd == -1)
-			exit(EXIT_FAILURE);
-		dup2(end[0], 0);
-		close(end[1]);
-		dup2(fd ,1);
-		close(end[0]);
-		execve(binary2, command2, env);
-		exit(EXIT_FAILURE);
-	}
+	if (!id2)
+		get_info(id1, id2);
+	// if (!id1)
+	// {
+	// 	if (!id2)
+	// 	{
+	// 		puts("child2");
+	// 		execve(binary2, command2, env);
+	// 	}
+	// 	else
+	// 	{
+	// 		puts("child1");
+	// 		execve(binary1, command1, env);
+	// 	}
+	// }
 	return (0);
 }
-// dup2(old, new);
