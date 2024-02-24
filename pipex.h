@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:11:56 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/21 09:29:25 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/02/24 14:28:00 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,8 @@ char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 char	*ft_strdup(const char *s1);
+char *create_path(char **paths, char *command);
+char *check_command(char *command, char **paths);
+char *get_env(char **env);
+char *extract_path(char **env);
 #endif
