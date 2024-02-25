@@ -6,93 +6,90 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:59 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/24 21:19:01 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/02/25 20:44:00 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	child1_do(int fd, int *p_fds, char **command1, char **env)
+void lol()
 {
-	dup2(fd, 0);
-	close(fd);
-	close(p_fds[0]);
-	dup2(p_fds[1], 1);
-	close(p_fds[1]);
-	if (execve(command1[0], command1, env) != -1)
-		perror("NIGGA");
-
+	system("leaks pipex");
 }
 
-void	child2_do(int fd, int *p_fds, char **command2, char **env)
+void	execute_child_1(char *path1, char **command1, int *end, char **env, id)
 {
-	close(p_fds[1]);
-	dup2(p_fds[0], 0);
-	close(p_fds[0]);
-	dup2(fd ,1);
-	close(fd);
-	execve(command2[0], command2, env);
+	int	id;
+
+	id = fork();
+	if (id == -1)
+		exit(EXIT_FAILURE);
+	if (!id)
+		child2_do(path1, end, command1, env);
 }
 
-int	valid_file(char *path, int in_or_out)
+void	execute_child_2(char *path2, char **command2, int *end, char **env, id)
 {
-	int fd;
+	int	id;
 
-	if (in_or_out == 0)
-		fd = open(path, O_RDONLY, 0666);
-	else
-		fd = open(path, O_WRONLY | O_TRUNC | O_CREAT, 0666);
-	return (fd);
+	id = fork();
+	if (id == -1)
+		exit(EXIT_FAILURE);
+	if (!id)
+		child1_do(path2, end, command2, env);
+}
+
+int	get_lenght(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (*array)
+	{
+		i++;
+		array++;
+	}
+	printf(">> %d\n", i);
+	return (i);
+}
+
+void	end_it(int *end, char **potential_path, char **command1, char **command2)
+{
+	close(end[1]);
+	close(end[0]);
+	ft_free(potential_path, get_lenght(potential_path));
+	ft_free(command1, get_lenght(command1));
+	ft_free(command2, get_lenght(command2));
 }
 
 int main (int ac, char **av, char **env)
 {
 	char **command1;
 	char **command2;
-	char *path;
+	char *tmp;
 	char **potential_path;
 	int end[2];
 	int id1;
 	int id2;
-	int fd1;
-	int fd2;
 
 	if (ac < 5)
 		exit(EXIT_FAILURE);
-	fd1 = valid_file(av[1], 0);
-	fd2 = valid_file(av[4], 1);
-	if (fd1 == -1 || fd2 == -1)
-	{
-		perror(av[1]);
-		exit(EXIT_FAILURE);
-	}
 	command1 = ft_split(av[2], ' ');
 	command2 = ft_split(av[3], ' ');
-	path = extract_path(env);
-	potential_path = ft_split(path, ':');
+	potential_path = ft_split(extract_path(env), ':');
+	tmp = command1[0];
 	command1[0] = check_command(command1[0], potential_path);
 	command2[0] = check_command(command2[0], potential_path);
 	if (!command1[0] || !command2[0])
 		exit(EXIT_FAILURE);
-	//free(paths); TODO++++++++
 	if (pipe(end) == -1)
 		exit(EXIT_FAILURE);
-	id1 = fork();
-	if (id1 == -1)
-		exit(EXIT_FAILURE);
-	if (!id1)
-		child1_do(fd1, end, command1, env);
-	id2 = fork();
-	if (id2 == -1)
-		exit(EXIT_FAILURE);
-	if (!id2)
-		child2_do(fd2, end, command2, env);
-	close(end[1]);
-	close(end[0]);
-	close(fd1);
-	close(fd2);
+	execute_child_1(av[1], command1, end, env, id1);
+	execute_child_2(av[4], command2, end, env, id2);
+	end_it(end, potential_path, command1, command2);
 	waitpid(id1, NULL, 0);
 	waitpid(id2, NULL, 0);
+	atexit(lol);
 	return (0);
 }
 // dup2(old, new);

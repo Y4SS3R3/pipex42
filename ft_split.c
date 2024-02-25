@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 18:47:16 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/20 15:22:07 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/02/25 19:10:23 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char	*gen_word(const char *s, char c)
 	return (result);
 }
 
-static void	*ft_free(char **to_free, size_t elements)
+void	*ft_free(char **to_free, size_t elements)
 {
 	size_t	i;
 
