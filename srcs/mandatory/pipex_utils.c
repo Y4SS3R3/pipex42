@@ -6,45 +6,13 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:53 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/25 20:39:48 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/02/26 15:34:39 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	child1_do(char *path, int *p_fds, char **command1, char **env)
-{
-	int	fd;
-
-	fd = valid_file(path, 0);
-	if (fd == -1)
-		exit(EXIT_FAILURE);
-	dup2(fd, 0);
-	close(fd);
-	close(p_fds[0]);
-	dup2(p_fds[1], 1);
-	close(p_fds[1]);
-	if (execve(command1[0], command1, env) == -1)
-		exit(EXIT_FAILURE);
-}
-
-void	child2_do(char *path, int *p_fds, char **command2, char **env)
-{
-	int	fd;
-
-	fd = valid_file(path, 1);
-	if (fd == -1)
-		exit(EXIT_FAILURE);
-	close(p_fds[1]);
-	dup2(p_fds[0], 0);
-	close(p_fds[0]);
-	dup2(fd ,1);
-	close(fd);
-	if (execve(command2[0], command2, env) == -1)
-		exit(EXIT_FAILURE);
-}
-
-char *create_path(char **paths, char *command)
+char	*create_path(char **paths, char *command)
 {
 	int		i;
 	char	*result;
@@ -59,9 +27,9 @@ char *create_path(char **paths, char *command)
 		result = ft_strjoin(paths[i], result);
 		free(tmp);
 		if (result == NULL)
-			return(NULL);
+			return (NULL);
 		if (access(result, X_OK) != -1)
-			break;
+			break ;
 		free(result);
 		i++;
 	}
@@ -69,10 +37,10 @@ char *create_path(char **paths, char *command)
 	return (result);
 }
 
-char *check_command(char *command, char **paths)
+char	*check_command(char *command, char **paths)
 {
-	char *result;
-	int i;
+	char	*result;
+	int		i;
 
 	i = 0;
 	if (command == NULL)
@@ -85,7 +53,7 @@ char *check_command(char *command, char **paths)
 		if (access(command, X_OK) == -1)
 		{
 			free(command);
-			return(NULL);
+			return (NULL);
 		}
 		else
 			result = command;
@@ -93,9 +61,9 @@ char *check_command(char *command, char **paths)
 	return (result);
 }
 
-char *get_env(char **env)
+char	*get_env(char **env)
 {
-	while(*env)
+	while (*env)
 	{
 		if (ft_strnstr(*env, "PATH", 5) != NULL)
 			return (*env);
@@ -104,9 +72,9 @@ char *get_env(char **env)
 	return (NULL);
 }
 
-char *extract_path(char **env)
+char	*extract_path(char **env)
 {
-	char *str;
+	char	*str;
 
 	str = get_env(env);
 	if (str == NULL)
@@ -118,7 +86,7 @@ char *extract_path(char **env)
 
 int	valid_file(char *path, int in_or_out)
 {
-	int fd;
+	int	fd;
 
 	if (in_or_out == 0)
 		fd = open(path, O_RDONLY, 0666);

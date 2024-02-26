@@ -6,20 +6,28 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:11:56 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/25 20:40:02 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/02/26 15:22:55 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <sys/wait.h>
-#include <stdlib.h>
-#include <string.h>
-#include <limits.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <stdlib.h>
+# include <string.h>
+# include <limits.h>
+
+typedef struct s_process
+{
+	char	*path;
+	char	**command;
+	int		pid;
+	int		fd;
+}		t_process;
 
 char	**ft_split(char const *s, char c);
 char	*ft_substr(const char *s, unsigned int start, size_t len);

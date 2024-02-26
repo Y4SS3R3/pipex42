@@ -6,26 +6,39 @@
 #    By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/24 14:29:45 by ymassiou          #+#    #+#              #
-#    Updated: 2024/02/24 14:33:09 by ymassiou         ###   ########.fr        #
+#    Updated: 2024/02/26 15:43:01 by ymassiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
-SRC = ft_split.c ft_substr.c \
-		ft_calloc.c ft_strlen.c ft_memset.c ft_strnstr.c ft_strchr.c \
-		ft_strjoin.c ft_memcpy.c ft_strdup.c ft_strlcat.c pipex.c pipex_utils.c
+SRC = srcs/mandatory/ft_split.c\
+		srcs/mandatory/ft_substr.c \
+		srcs/mandatory/ft_calloc.c \
+		srcs/mandatory/ft_strlen.c \
+		srcs/mandatory/ft_memset.c \
+		srcs/mandatory/ft_strnstr.c \
+		srcs/mandatory/ft_strchr.c \
+		srcs/mandatory/ft_strjoin.c \
+		srcs/mandatory/ft_memcpy.c \
+		srcs/mandatory/ft_strdup.c \
+		srcs/mandatory/ft_strlcat.c \
+		srcs/mandatory/pipex.c \
+		srcs/mandatory/pipex_utils.c \
+		srcs/mandatory/child_do.c
 OBJS = $(SRC:%.c=%.o)
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
 RM = rm -f
+INCS = -I ./includes
+HEADER = ./includes/pipex.h
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
-%.o: %.c pipex.h
-	$(CC) -Wall -Wextra -Werror -c $< -o $@
+%.o: %.c $(HEADER)
+	$(CC) -Wall -Wextra -Werror -c $< -o $@ $(INCS)
 
 clean:
 	$(RM) $(OBJS)
