@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:53 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/26 15:34:39 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/02/26 16:33:52 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,22 @@ char	*create_path(char **paths, char *command)
 	while (paths[i])
 	{
 		result = ft_strjoin("/", command);
+		// printf("(1)->%s<-\n", result);
 		tmp = result;
 		result = ft_strjoin(paths[i], result);
+		// printf("(2)->%s<-\n", result);
 		free(tmp);
 		if (result == NULL)
 			return (NULL);
 		if (access(result, X_OK) != -1)
-			break ;
+			return (result);
 		free(result);
 		i++;
+		// printf("(3)->%s<-\n", result);
 	}
 	free(command);
-	return (result);
+	// printf("returned :->%s<-\n", result);
+	return (NULL);
 }
 
 char	*check_command(char *command, char **paths)
@@ -78,7 +82,7 @@ char	*extract_path(char **env)
 
 	str = get_env(env);
 	if (str == NULL)
-		exit(EXIT_FAILURE);
+		return (NULL);
 	while (*str != '=')
 		str++;
 	return (str + 1);

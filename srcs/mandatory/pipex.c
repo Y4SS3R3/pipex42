@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:59 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/26 15:25:43 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/02/26 16:26:46 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	execute_child(t_process *child, int *end, char **env,
 {
 	child->pid = fork();
 	if (child->pid == -1)
-		exit(EXIT_FAILURE);
+		errno_protocol();
 	if (!child->pid)
 		child_do(child->path, end, child->command, env);
 }
@@ -67,9 +67,9 @@ int	main(int ac, char **av, char **env)
 	child1.command[0] = check_command(child1.command[0], potential_path);
 	child2.command[0] = check_command(child2.command[0], potential_path);
 	if (!child1.command[0] || !child2.command[0])
-		exit(EXIT_FAILURE);
+		errno_protocol();
 	if (pipe(end) == -1)
-		exit(EXIT_FAILURE);
+		errno_protocol();
 	execute_child(&child1, end, env, child1_do);
 	execute_child(&child2, end, env, child2_do);
 	end_it(end, potential_path, child1.command, child2.command);

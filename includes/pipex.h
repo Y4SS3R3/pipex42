@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:11:56 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/26 15:22:55 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/02/26 16:24:52 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,5 @@ int		valid_file(char *path, int in_or_out);
 void	*ft_free(char **to_free, size_t elements);
 void	child1_do(char *path, int *p_fds, char **command1, char **env);
 void	child2_do(char *path, int *p_fds, char **command2, char **env);
+void	errno_protocol(void);
 #endif

@@ -6,12 +6,12 @@
 #    By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/24 14:29:45 by ymassiou          #+#    #+#              #
-#    Updated: 2024/02/26 15:43:01 by ymassiou         ###   ########.fr        #
+#    Updated: 2024/02/26 15:47:03 by ymassiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
-SRC = srcs/mandatory/ft_split.c\
+SRC = srcs/mandatory/ft_split.c \
 		srcs/mandatory/ft_substr.c \
 		srcs/mandatory/ft_calloc.c \
 		srcs/mandatory/ft_strlen.c \
