@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/04 15:42:06 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/25 18:06:25 by ymassiou         ###   ########.fr       */
+/*   Created: 2023/11/02 19:04:14 by ymassiou          #+#    #+#             */
+/*   Updated: 2024/02/28 17:26:41 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-char	*ft_strjoin(char *s1, char *s2)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	char	*result;
-
-	if (s1 == NULL)
-		return (ft_strdup(s2));
-	if (s2 == NULL)
-		return (ft_strdup(s1));
-	result = NULL;
-	result = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (result == NULL)
-		return (NULL);
-	ft_memcpy(result, s1, ft_strlen(s1) + 1);
-	ft_strlcat(result, s2, ft_strlen(s1) + ft_strlen(s2) + 2);
-	return (result);
+	while ((*s1 || *s2) && n)
+	{
+		if (*s1 != *s2)
+			return ((unsigned char)*s1 - (unsigned char)*s2);
+		s1++;
+		s2++;
+		n--;
+	}
+	return (0);
 }

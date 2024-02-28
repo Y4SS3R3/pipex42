@@ -6,16 +6,11 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:59 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/26 16:26:46 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/02/27 15:24:12 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-void	lol(void)
-{
-	system("leaks pipex");
-}
 
 void	execute_child(t_process *child, int *end, char **env,
 		void (*child_do)(char *, int *, char **, char **))
