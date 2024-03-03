@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/19 09:11:56 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/26 16:24:52 by ymassiou         ###   ########.fr       */
+/*   Created: 2024/03/02 16:07:35 by ymassiou          #+#    #+#             */
+/*   Updated: 2024/03/03 15:30:29 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -24,9 +24,12 @@
 typedef struct s_process
 {
 	char	*path;
+	char	**envp;
 	char	**command;
 	int		pid;
 	int		fd;
+	int		end[2];
+	char	**potential_path;
 }		t_process;
 
 char	**ft_split(char const *s, char c);
@@ -46,7 +49,13 @@ char	*get_env(char **env);
 char	*extract_path(char **env);
 int		valid_file(char *path, int in_or_out);
 void	*ft_free(char **to_free, size_t elements);
-void	child1_do(char *path, int *p_fds, char **command1, char **env);
-void	child2_do(char *path, int *p_fds, char **command2, char **env);
 void	errno_protocol(void);
+int	get_next_line(char **line);
+int	get_lenght(char **array);
+size_t	ft_strcmp(char *s1, char *s2);
+char	*ft_itoa(int n);
+void	dup2_more(int old, int new);
+int	fork_plus();
+void	pass_command(t_process *data, char *command_av);
+void	last_child(t_process *data, int out_fd);
 #endif

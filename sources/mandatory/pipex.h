@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_bonus.h                                      :+:      :+:    :+:   */
+/*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/27 15:17:39 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/28 17:27:04 by ymassiou         ###   ########.fr       */
+/*   Created: 2024/02/19 09:11:56 by ymassiou          #+#    #+#             */
+/*   Updated: 2024/02/29 18:17:34 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_BONUS_H
-# define PIPEX_BONUS_H
+#ifndef PIPEX_H
+# define PIPEX_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -49,7 +49,7 @@ void	*ft_free(char **to_free, size_t elements);
 void	child1_do(char *path, int *p_fds, char **command1, char **env);
 void	child2_do(char *path, int *p_fds, char **command2, char **env);
 void	errno_protocol(void);
-size_t	ft_strcmp(char *s1, char *s2);
-char	*get_next_line(int fd);
-int	ft_strncmp(const char *s1, const char *s2, size_t n);
+void	end_it(int *end, char **potential_path,
+	char **command1, char **command2);
+	int	get_lenght(char **array);
 #endif

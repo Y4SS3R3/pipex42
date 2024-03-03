@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_memcpy_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 16:21:01 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/21 08:59:14 by ymassiou         ###   ########.fr       */
+/*   Created: 2023/11/02 11:12:27 by ymassiou          #+#    #+#             */
+/*   Updated: 2024/03/02 15:41:11 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-char	*ft_strchr(const char *s, int c)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	size_t	i;
+	size_t			i;
+	unsigned char	*tmpd;
+	unsigned char	*tmps;
 
+	if (src == NULL && dst == NULL)
+		return (dst);
 	i = 0;
-	while (s[i])
+	tmpd = (unsigned char *)dst;
+	tmps = (unsigned char *)src;
+	while (i < n)
 	{
-		if (s[i] == (char)c)
-			return ((char *)&s[i]);
+		tmpd[i] = tmps[i];
 		i++;
 	}
-	if (s[i] == (char)c)
-		return ((char *)&s[i]);
-	return (NULL);
+	return (dst);
 }

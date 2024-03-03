@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:53 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/28 14:07:25 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/02 17:51:44 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,29 +109,31 @@ size_t	ft_strcmp(char *s1, char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-int	get_next_line(char **line)
+void	end_it(int *end, char **potential_path,
+	char **command1, char **command2)
 {
-	char	*buffer;
-	int		readed;
-	int		i;
-	char	c;
+	close(end[1]);
+	close(end[0]);
+	ft_free(potential_path, get_lenght(potential_path));
+	ft_free(command1, get_lenght(command1));
+	ft_free(command2, get_lenght(command2));
+}
+
+int	get_lenght(char **array)
+{
+	int	i;
 
 	i = 0;
-	readed = 0;
-	buffer = (char *)malloc(10000);
-	if (!buffer)
-		return (-1);
-	readed = read(0, &c, 1);
-	while (readed && c != '\n' && c != '\0')
+	while (*array)
 	{
-		if (c != '\n' && c != '\0')
-			buffer[i] = c;
 		i++;
-		readed = read(0, &c, 1);
+		array++;
 	}
-	buffer[i] = '\n';
-	buffer[++i] = '\0';
-	*line = buffer;
-	free(buffer);
-	return (readed);
+	return (i);
+}
+
+void	errno_protocol(void)
+{
+	perror(NULL);
+	exit(EXIT_FAILURE);
 }

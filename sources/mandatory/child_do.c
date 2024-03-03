@@ -6,17 +6,11 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:21:02 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/26 21:12:19 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/02 17:51:37 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-void	errno_protocol(void)
-{
-	perror(NULL);
-	exit(EXIT_FAILURE);
-}
 
 void	child1_do(char *path, int *p_fds, char **command1, char **env)
 {

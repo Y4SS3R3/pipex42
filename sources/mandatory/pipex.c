@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:59 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/27 15:24:12 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/02/29 18:17:20 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,6 @@ void	execute_child(t_process *child, int *end, char **env,
 		errno_protocol();
 	if (!child->pid)
 		child_do(child->path, end, child->command, env);
-}
-
-int	get_lenght(char **array)
-{
-	int	i;
-
-	i = 0;
-	while (*array)
-	{
-		i++;
-		array++;
-	}
-	return (i);
-}
-
-void	end_it(int *end, char **potential_path,
-	char **command1, char **command2)
-{
-	close(end[1]);
-	close(end[0]);
-	ft_free(potential_path, get_lenght(potential_path));
-	ft_free(command1, get_lenght(command1));
-	ft_free(command2, get_lenght(command2));
 }
 
 int	main(int ac, char **av, char **env)

@@ -1,23 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_substr_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/01 17:53:33 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/20 15:26:56 by ymassiou         ###   ########.fr       */
+/*   Created: 2023/11/04 12:45:21 by ymassiou          #+#    #+#             */
+/*   Updated: 2024/03/02 18:42:45 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-size_t	ft_strlen(const char *s)
+char	*ft_substr(const char *s, unsigned int start, size_t len)
 {
 	size_t	i;
+	char	*result;
 
+	if (s == NULL)
+		return (NULL);
+	if (start > ft_strlen(s))
+		return ((char *)ft_calloc(1, 1));
+	if (len > ft_strlen(&s[start]))
+		len = ft_strlen(&s[start]);
 	i = 0;
-	while (s[i])
+	result = NULL;
+	result = (char *)malloc(len + 1);
+	if (result == NULL)
+		return (NULL);
+	while (i < len)
+	{
+		result[i] = s[start + i];
 		i++;
-	return (i);
+	}
+	result[len] = 0;
+	return (result);
 }
