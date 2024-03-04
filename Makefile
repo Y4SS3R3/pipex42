@@ -6,7 +6,7 @@
 #    By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/24 14:29:45 by ymassiou          #+#    #+#              #
-#    Updated: 2024/03/02 16:07:14 by ymassiou         ###   ########.fr        #
+#    Updated: 2024/03/04 00:42:52 by ymassiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ SRC_BONUS =	sources/bonus/ft_memset_bonus.c \
 OBJS = $(SRC:%.c=%.o)
 OBJS_BONUS = $(SRC_BONUS:%.c=%.o)
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 INCS = -I ./includes
 HEADER = pipex.h

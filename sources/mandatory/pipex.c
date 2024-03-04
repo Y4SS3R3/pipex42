@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:59 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/29 18:17:20 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/03 22:35:22 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ int	main(int ac, char **av, char **env)
 	potential_path = ft_split(extract_path(env), ':');
 	child1.command[0] = check_command(child1.command[0], potential_path);
 	child2.command[0] = check_command(child2.command[0], potential_path);
-	if (!child1.command[0] || !child2.command[0])
-		errno_protocol();
 	if (pipe(end) == -1)
 		errno_protocol();
 	execute_child(&child1, end, env, child1_do);

@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:15:38 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/03 15:30:13 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/04 01:13:12 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,5 @@ int main(int ac, char **av, char **env)
 	}
 	pipex_middle(index, ac, &data, av);
 	pipex_end(&data, av, out_fd, ac);
-	// atexit(ff);
 	return(0);
 }

@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:53 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/02 21:31:25 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/04 01:47:49 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	last_child(t_process *data, int out_fd)
 {
 	dup2_more(out_fd, 1);
 	execve(data->command[0], data->command, data->envp);
+	perror(NULL);
+	exit(EXIT_FAILURE);
 }
 
 int	fork_plus()
@@ -34,6 +36,11 @@ void	pass_command(t_process *data, char *command_av)
 	dup2_more(data->end[1], 1);
 	data->command = ft_split(command_av, ' ');
 	data->command[0] = check_command(data->command[0], data->potential_path);
+	if(data->command[0] == NULL)
+	{
+		perror("Error");
+		exit(EXIT_FAILURE);
+	}
 	execve(data->command[0], data->command, data->envp);
 }
 
@@ -66,7 +73,7 @@ char	*create_path(char **paths, char *command)
 		free(result);
 		i++;
 	}
-	free(command);
+	// free(command);
 	return (NULL);
 }
 
