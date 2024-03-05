@@ -6,13 +6,13 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 15:06:52 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/03 15:29:57 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:31:58 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-int	get_next_line(char **line)
+int		get_next_line(char **line)
 {
 	char	*buffer;
 	int		readed;
@@ -39,3 +39,4 @@ int	get_next_line(char **line)
 	*line = buffer;
 	return (readed);
 }
+

@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 16:07:35 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/03 15:30:29 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:55:44 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <stdlib.h>
 # include <string.h>
 # include <limits.h>
+
+#define BUFFER_SIZE 42
 
 typedef struct s_process
 {
@@ -50,12 +52,12 @@ char	*extract_path(char **env);
 int		valid_file(char *path, int in_or_out);
 void	*ft_free(char **to_free, size_t elements);
 void	errno_protocol(void);
-int	get_next_line(char **line);
-int	get_lenght(char **array);
+int		get_next_line(char **line);
+int		get_lenght(char **array);
 size_t	ft_strcmp(char *s1, char *s2);
 char	*ft_itoa(int n);
-void	dup2_more(int old, int new);
-int	fork_plus();
+int		dup2_more(int old, int new);
+int		fork_plus();
 void	pass_command(t_process *data, char *command_av);
 void	last_child(t_process *data, int out_fd);
 #endif

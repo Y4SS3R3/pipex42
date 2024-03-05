@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:53 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/04 01:47:49 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:49:15 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,22 @@ void	pass_command(t_process *data, char *command_av)
 	data->command[0] = check_command(data->command[0], data->potential_path);
 	if(data->command[0] == NULL)
 	{
-		perror("Error");
+		write(2, "Command not found\n.", 19);
 		exit(EXIT_FAILURE);
 	}
 	execve(data->command[0], data->command, data->envp);
 }
 
-void	dup2_more(int old, int new)
+int	dup2_more(int old, int new)
 {
-	if (dup2(old, new) == -1)
-		exit(EXIT_FAILURE);
-	close(old);
+	int ret1;
+	int ret2;
+
+	ret1 = dup2(old, new);
+	ret2 = close(old);
+	if (ret1 == -1 || ret2 == -1)
+		return (-1);
+	return (0);
 }
 
 
