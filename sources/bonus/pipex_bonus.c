@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:15:38 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/05 17:46:09 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/06 12:58:02 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,32 @@ void	check_env(t_process *data, char **env)
 
 void	pipex_end(t_process *data, char **av, int out_fd, int ac)
 {
-	char	*tmp;
-
 	data->command = ft_split(av[ac - 2], ' ');
-	tmp = data->command[0];
 	data->command[0] = check_command(data->command[0], data->potential_path);
-	free(tmp);
-	data->pid = fork_plus();
+	data->pid = fork();
+	if (data->pid == -1)
+	{
+		write(1, "Fork() error.\n", 14);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
+		ft_free(data->command, get_lenght(data->command));
+		exit(EXIT_FAILURE);
+	}
 	if(data->pid == 0)
 		last_child(data, out_fd);
-	close(0);
-	close(out_fd);
+	if (close(0) == -1)
+	{
+		write(1, "Fork() error.\n", 14);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
+		ft_free(data->command, get_lenght(data->command));
+		exit(EXIT_FAILURE);
+	}
+	if (close(out_fd) == -1)
+	{
+		write(1, "Fork() error.\n", 14);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
+		ft_free(data->command, get_lenght(data->command));
+		exit(EXIT_FAILURE);
+	}
 	while (wait(NULL) != -1);
 	ft_free(data->potential_path, get_lenght(data->potential_path));
 	ft_free(data->command, get_lenght(data->command));
@@ -66,21 +81,40 @@ void	pipex_middle(int index, int ac,t_process *data, char **av)
 	while (index < ac - 2)
 	{
 		if (pipe(data->end) == -1)
-			errno_protocol();
-		data->pid = fork_plus();
+		{
+			write(1, "Pipe() problem\n.", 16);
+			ft_free(data->potential_path, get_lenght(data->potential_path));
+			exit(EXIT_FAILURE);
+		}
+		data->pid = fork();
+		if (data->pid == -1)
+		{
+			write(1, "Fork() problem.\n", 16);
+			ft_free(data->potential_path, get_lenght(data->potential_path));
+			exit(EXIT_FAILURE);
+		}
 		if (data->pid == 0)
 			pass_command(data, av[index]);
 		else
 		{
-			close(data->end[1]);
-			dup2(data->end[0], 0);
-			close(data->end[0]);
+			if (close(data->end[1]) == -1)
+			{
+				write(1, "Close() problem.\n", 17);
+				ft_free(data->potential_path, get_lenght(data->potential_path));
+				exit(EXIT_FAILURE);
+			}
+			if (dup2_more(data->end[0], 0) == -1)
+			{
+				write(2, "Unexpected error[3].\n", 18);
+				ft_free(data->potential_path, get_lenght(data->potential_path));
+				exit(EXIT_FAILURE);
+			}
 		}
 		index++;
 	}
 }
 
-void	fill_heredoc(char *limiter, int hrdc_fd)
+void	fill_heredoc(char *limiter, int hrdc_fd, t_process *data)
 {
 	int		read;
 	char	*line;
@@ -92,12 +126,15 @@ void	fill_heredoc(char *limiter, int hrdc_fd)
 		write(1, "pipe heredoc> ", 14);
 		read = get_next_line(&line);
 		if (read == 0)
+		{
+			write(1, "\n", 1);
 			return ;
-		/*double free when ^D at the first line*/
+		}
 		if (read == -1)
 		{
 			free(line);
 			write(2, "Problem reading from the here_doc file.\n", 40);
+			ft_free(data->potential_path, get_lenght(data->potential_path));
 			exit(EXIT_FAILURE);
 		}
 		tmp = ft_substr(line, 0, ft_strlen(line) - 1);
@@ -105,6 +142,7 @@ void	fill_heredoc(char *limiter, int hrdc_fd)
 		{
 			free(line);
 			write(2, "Malloc() error.\n", 16);
+			ft_free(data->potential_path, get_lenght(data->potential_path));
 			exit(EXIT_FAILURE);
 		}
 		if (ft_strcmp(limiter, tmp) == 0)
@@ -118,12 +156,11 @@ void	fill_heredoc(char *limiter, int hrdc_fd)
 			free(tmp);
 			free(line);
 			write(2, "Write() error.\n", 15);
+			ft_free(data->potential_path, get_lenght(data->potential_path));
 			exit(EXIT_FAILURE);
 		}
-		if (tmp)
-			free(tmp);
-		if (line)
-			free(line);
+		free(tmp);
+		free(line);
 	}
 }
 
@@ -149,7 +186,7 @@ char *randomize_file_name(void)
 	return (NULL);
 }
 
-void	heredocing_time(int ac, char *limiter)
+void	heredocing_time(int ac, char *limiter, t_process *data)
 {
 	int		fd;
 	char	*name;
@@ -166,13 +203,15 @@ void	heredocing_time(int ac, char *limiter)
 	{
 		free(name);
 		write(2, "Failure while opening here_doc file.\n", 37);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
 		exit(EXIT_FAILURE);
 	}
-	fill_heredoc(limiter, fd);
+	fill_heredoc(limiter, fd, data);
 	if (close(fd) == -1)
 	{
 		free(name);
 		write(2, "Close() failed.\n", 14);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
 		exit(EXIT_FAILURE);
 	}
 	fd = open(name, O_RDONLY);
@@ -180,18 +219,21 @@ void	heredocing_time(int ac, char *limiter)
 	{
 		free(name);
 		write(2, "Open() failed.\n", 15);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
 		exit(EXIT_FAILURE);
 	}
 	if (dup2_more(fd, 0) == -1)
 	{
 		free(name);
 		write(2, "Unexpected error[1].\n", 18);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
 		exit(EXIT_FAILURE);
 	}
 	if (unlink(name) == -1)
 	{
 		free(name);
 		write(2, "Problem unlinking the file.\n", 28);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
 		exit(EXIT_FAILURE);
 	}
 	free(name);
@@ -218,14 +260,31 @@ int main(int ac, char **av, char **env)
 	{
 		index = 3;
 		out_fd = valid_file(av[ac - 1], 2);
-		heredocing_time(ac, av[2]);
+		if (out_fd == -1)
+		{
+			write(2, "Problem opening the outfile when here_doc is used\n", 50);
+			ft_free(data.potential_path, get_lenght(data.potential_path));
+			exit(EXIT_FAILURE);
+		}
+		heredocing_time(ac, av[2], &data);
 	}
 	else
 	{
 		index = 2;
 		in_fd = valid_file(av[1], 0);
 		out_fd = valid_file(av[ac - 1], 1);
-		dup2_more(in_fd, 0);
+		if (in_fd == -1 || out_fd == -1)
+		{
+			write(2, "Unexpected error[2].\n", 18);
+			ft_free(data.potential_path, get_lenght(data.potential_path));
+			exit(EXIT_FAILURE);
+		}
+		if (dup2_more(in_fd, 0) == -1)
+		{
+			write(2, "Dup2() problem.\n", 16);
+			ft_free(data.potential_path, get_lenght(data.potential_path));
+			exit(EXIT_FAILURE);
+		}
 	}
 	pipex_middle(index, ac, &data, av);
 	pipex_end(&data, av, out_fd, ac);

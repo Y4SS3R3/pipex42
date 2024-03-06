@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:53 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/05 17:49:15 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/06 12:56:25 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,52 @@
 
 void	last_child(t_process *data, int out_fd)
 {
-	dup2_more(out_fd, 1);
-	execve(data->command[0], data->command, data->envp);
-	perror(NULL);
-	exit(EXIT_FAILURE);
-}
-
-int	fork_plus()
-{
-	int	pid;
-
-	pid = fork();
-	if (pid == -1)
-		errno_protocol();
-	return (pid);
+	if (dup2_more(out_fd, 1) == -1)
+	{
+		write(2, "Unexpected error[4].\n", 21);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
+		ft_free(data->command, get_lenght(data->command));
+		exit(EXIT_FAILURE);
+	}
+	if (execve(data->command[0], data->command, data->envp) == -1)
+	{
+		write(2, "Execve() error.\n", 16);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
+		ft_free(data->command, get_lenght(data->command));
+		exit(EXIT_FAILURE);
+	}
 }
 
 void	pass_command(t_process *data, char *command_av)
 {
-	close(data->end[0]);
-	dup2_more(data->end[1], 1);
+	if (close(data->end[0]) == -1)
+	{
+		write(1, "Close() problem.\n", 17);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
+		exit(EXIT_FAILURE);
+	}
+	if (dup2_more(data->end[1], 1) == -1)
+	{
+		write(1, "Dup2() problem.\n", 17);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
+		exit(EXIT_FAILURE);
+	}
 	data->command = ft_split(command_av, ' ');
 	data->command[0] = check_command(data->command[0], data->potential_path);
 	if(data->command[0] == NULL)
 	{
-		write(2, "Command not found\n.", 19);
+		write(2, "Command not found.\n", 19);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
+		ft_free(data->command, get_lenght(data->command));
 		exit(EXIT_FAILURE);
 	}
-	execve(data->command[0], data->command, data->envp);
+	if (execve(data->command[0], data->command, data->envp) == -1)
+	{
+		write(1, "Execve() error.\n", 16);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
+		ft_free(data->command, get_lenght(data->command));
+		exit(EXIT_FAILURE);
+	}
 }
 
 int	dup2_more(int old, int new)

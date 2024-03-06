@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 15:06:52 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/05 17:31:58 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/06 10:45:30 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ int		get_next_line(char **line)
 		readed = read(0, &c, 1);
 	}
 	if (readed == 0)
+	{
+		free(buffer);
 		return (0);
+	}
 	buffer[i] = '\n';
 	buffer[++i] = '\0';
 	*line = buffer;
