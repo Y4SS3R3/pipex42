@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:15:38 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/07 15:59:51 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/07 20:49:25 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,19 @@ void	pipex_middle(int ac,t_process *data, char **av)
 	}
 }
 
+void	error_ii(char *message, t_process *data, char *to_free)
+{
+	free(to_free);
+	ft_putstr_fd(message, 2);
+	ft_free(data->potential_path, get_lenght(data->potential_path));
+	exit(EXIT_FAILURE);
+}
+
+int	write_plus()
+{
+
+}
+
 void	fill_heredoc(char *limiter, int hrdc_fd, t_process *data)
 {
 	int		read;
@@ -216,20 +229,10 @@ void	fill_heredoc(char *limiter, int hrdc_fd, t_process *data)
 			return ;
 		}
 		if (read == -1)
-		{
-			free(line);
-			write(2, "Problem reading from the here_doc file.\n", 40);
-			ft_free(data->potential_path, get_lenght(data->potential_path));
-			exit(EXIT_FAILURE);
-		}
+			error_ii("Problem reading from the here_doc file.\n", data, line);
 		tmp = ft_substr(line, 0, ft_strlen(line) - 1);
 		if (tmp == NULL)
-		{
-			free(line);
-			write(2, "Malloc() error.\n", 16);
-			ft_free(data->potential_path, get_lenght(data->potential_path));
-			exit(EXIT_FAILURE);
-		}
+			error_ii("Malloc() error.\n", data, line);
 		if (ft_strcmp(limiter, tmp) == 0)
 		{
 			free(line);
@@ -239,10 +242,7 @@ void	fill_heredoc(char *limiter, int hrdc_fd, t_process *data)
 		if (write(hrdc_fd, line, ft_strlen(line)) == -1)
 		{
 			free(tmp);
-			free(line);
-			write(2, "Write() error.\n", 15);
-			ft_free(data->potential_path, get_lenght(data->potential_path));
-			exit(EXIT_FAILURE);
+			error_ii("Write() error.\n", data, line);
 		}
 		free(tmp);
 		free(line);
@@ -271,56 +271,42 @@ char *randomize_file_name(void)
 	return (NULL);
 }
 
+void	hrdc_arg_error()
+{
+	write(2, "	->here_doc needs 6 arguments at least.\n", 40);
+	write(2, "	->Usage: ./pipex_bonus here_doc LIMITER cmd1 cmd2 cmd3 ... OUTFILE.\n", 69);
+	exit(EXIT_FAILURE);
+}
+
+void	error_i(char *message, t_process *data, char *to_free)
+{
+	free(to_free);
+	ft_putstr_fd(message, 2);
+	ft_free(data->potential_path, get_lenght(data->potential_path));
+	exit(EXIT_FAILURE);
+}
+
 void	heredocing_time(int ac, char *limiter, t_process *data)
 {
 	int		fd;
 	char	*name;
 
 	if (ac < 6)
-	{
-		write(2, "	->here_doc needs 6 arguments at least.\n", 40);
-		write(2, "	->Usage: ./pipex_bonus here_doc LIMITER cmd1 cmd2 cmd3 ... OUTFILE.\n", 69);
-		exit(EXIT_FAILURE);
-	}
+		hrdc_arg_error();
 	name = randomize_file_name();
 	fd = open(name ,O_CREAT | O_TRUNC | O_RDWR, 0666);
 	if (fd == -1)
-	{
-		free(name);
-		write(2, "Failure while opening here_doc file.\n", 37);
-		ft_free(data->potential_path, get_lenght(data->potential_path));
-		exit(EXIT_FAILURE);
-	}
+		error_i("Failure while opening here_doc file.\n", data, name);
 	fill_heredoc(limiter, fd, data);
 	if (close(fd) == -1)
-	{
-		free(name);
-		write(2, "Close() failed.\n", 14);
-		ft_free(data->potential_path, get_lenght(data->potential_path));
-		exit(EXIT_FAILURE);
-	}
+		error_i("Close() failed.\n", data, name);
 	fd = open(name, O_RDONLY);
 	if (fd == -1)
-	{
-		free(name);
-		write(2, "Open() failed.\n", 15);
-		ft_free(data->potential_path, get_lenght(data->potential_path));
-		exit(EXIT_FAILURE);
-	}
+		error_i("Open() failed.\n", data, name);
 	if (dup2_more(fd, 0) == -1)
-	{
-		free(name);
-		write(2, "Unexpected error[1].\n", 21);
-		ft_free(data->potential_path, get_lenght(data->potential_path));
-		exit(EXIT_FAILURE);
-	}
+		error_i("Unexpected error[1].\n", data, name);
 	if (unlink(name) == -1)
-	{
-		free(name);
-		write(2, "Problem unlinking the file.\n", 28);
-		ft_free(data->potential_path, get_lenght(data->potential_path));
-		exit(EXIT_FAILURE);
-	}
+		error_i( "Problem unlinking the file.\n", data, name);
 	free(name);
 }
 

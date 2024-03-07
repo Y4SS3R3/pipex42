@@ -6,11 +6,22 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 12:45:21 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/02 18:42:45 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/07 20:08:48 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	if (s == NULL)
+		return ;
+	if (fd >= 0)
+	{
+		while (*s)
+			write(fd, s++, 1);
+	}
+}
 
 char	*ft_substr(const char *s, unsigned int start, size_t len)
 {
