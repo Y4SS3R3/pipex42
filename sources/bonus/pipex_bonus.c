@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:15:38 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/07 12:21:09 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/07 13:11:35 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ void	pipex_start(t_process *data, char **av, int ac, int *out_fd)
 		if (in_fd == -1)
 		{
 			close(data->end[0]);
+			close(data->end[1]);
+			close(*out_fd);
 			write(2, "The infile does not exist.\n", 27);
 			ft_free(data->potential_path, get_lenght(data->potential_path));
 			exit(EXIT_FAILURE);
@@ -87,13 +89,19 @@ void	pipex_start(t_process *data, char **av, int ac, int *out_fd)
 	{
 		if (close(data->end[1]) == -1)
 		{
-			write(1, "Close() problem.\n", 17);
+			write(1, "Close(1) problem.\n", 17);
 			ft_free(data->potential_path, get_lenght(data->potential_path));
 			exit(EXIT_FAILURE);
 		}
 		if (dup2_more(data->end[0], 0) == -1)
 		{
 			write(2, "Unexpected error[3].\n", 21);
+			ft_free(data->potential_path, get_lenght(data->potential_path));
+			exit(EXIT_FAILURE);
+		}
+		if (in_fd != -1 && close(in_fd) == -1)
+		{
+			write(1, "Close(2) problem.\n", 17);
 			ft_free(data->potential_path, get_lenght(data->potential_path));
 			exit(EXIT_FAILURE);
 		}
@@ -310,7 +318,7 @@ void	heredocing_time(int ac, char *limiter, t_process *data)
 
 void ff()
 {
-	system("lsof -c pipex_bonus");
+	system("leaks pipex_bonus");
 }
 
 int main(int ac, char **av, char **env)
