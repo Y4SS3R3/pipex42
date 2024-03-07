@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:15:38 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/07 13:11:35 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:59:51 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	pipex_start(t_process *data, char **av, int ac, int *out_fd)
 		{
 			close(data->end[0]);
 			close(data->end[1]);
-			close(*out_fd);
+			// close(*out_fd);
 			write(2, "The infile does not exist.\n", 27);
 			ft_free(data->potential_path, get_lenght(data->potential_path));
 			exit(EXIT_FAILURE);
@@ -115,14 +115,7 @@ void	pipex_end(t_process *data, char **av, int out_fd, int ac)
 	data->command = ft_split(av[ac - 2], ' ');
 	tmp = data->command[0];
 	data->command[0] = check_command(data->command[0], data->potential_path);
-	if (data->command[0] == NULL)
-	{
-		write(1, "Command not found.\n", 19);
-		ft_free(data->potential_path, get_lenght(data->potential_path));
-		ft_free(data->command, get_lenght(data->command));
-		exit(EXIT_FAILURE);
-	}
-	if (strcmp(data->command[0], tmp) != 0)
+	if (ft_strcmp(data->command[0], tmp) != 0)
 		free(tmp);
 	data->pid = fork();
 	if (data->pid == -1)
@@ -132,29 +125,44 @@ void	pipex_end(t_process *data, char **av, int out_fd, int ac)
 		ft_free(data->command, get_lenght(data->command));
 		exit(EXIT_FAILURE);
 	}
-	if(data->pid == 0)
+	if (data->pid == 0)
+	{
+		if (data->command[0] == NULL)
+		{
+			write(1, "Command not found.\n", 19);
+			ft_free(data->potential_path, get_lenght(data->potential_path));
+			ft_free(data->command, get_lenght(data->command));
+			exit(EXIT_FAILURE);
+		}
 		last_child(data, out_fd);
-	if (close(0) == -1)
+	}
+	else
 	{
-		write(1, "Fork() error.\n", 14);
+		if (close(0) == -1)
+		{
+			write(1, "Fork() error.\n", 14);
+			ft_free(data->potential_path, get_lenght(data->potential_path));
+			ft_free(data->command, get_lenght(data->command));
+			exit(EXIT_FAILURE);
+		}
+		if (close(out_fd) == -1)
+		{
+			write(1, "Fork() error.\n", 14);
+			ft_free(data->potential_path, get_lenght(data->potential_path));
+			ft_free(data->command, get_lenght(data->command));
+			exit(EXIT_FAILURE);
+		}
+		while (wait(NULL) != -1);
 		ft_free(data->potential_path, get_lenght(data->potential_path));
 		ft_free(data->command, get_lenght(data->command));
-		exit(EXIT_FAILURE);
 	}
-	if (close(out_fd) == -1)
-	{
-		write(1, "Fork() error.\n", 14);
-		ft_free(data->potential_path, get_lenght(data->potential_path));
-		ft_free(data->command, get_lenght(data->command));
-		exit(EXIT_FAILURE);
-	}
-	while (wait(NULL) != -1);
-	ft_free(data->potential_path, get_lenght(data->potential_path));
-	ft_free(data->command, get_lenght(data->command));
 }
 
-void	pipex_middle(int index, int ac,t_process *data, char **av)
+void	pipex_middle(int ac,t_process *data, char **av)
 {
+	int	index;
+
+	index = 3;
 	while (index < ac - 2)
 	{
 		if (pipe(data->end) == -1)
@@ -346,7 +354,7 @@ int main(int ac, char **av, char **env)
 	}
 	else
 		pipex_start(&data, av, ac, &out_fd);
-	pipex_middle(3, ac, &data, av);
+	pipex_middle(ac, &data, av);
 	pipex_end(&data, av, out_fd, ac);
 	return(0);
 }
