@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:15:38 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/07 11:15:34 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/07 12:21:09 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,65 @@ void	check_env(t_process *data, char **env)
 		exit(EXIT_FAILURE);
 	}
 	data->envp = env;
+}
+
+void	pipex_start(t_process *data, char **av, int ac, int *out_fd)
+{
+	int in_fd;
+
+	if (pipe(data->end) == -1)
+	{
+		write(1, "Pipe() problem.\n", 16);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
+		exit(EXIT_FAILURE);
+	}
+	in_fd = valid_file(av[1], 0);
+	*out_fd = valid_file(av[ac - 1], 1);
+	if (*out_fd == -1)
+	{
+		write(2, "Unexpected error[2].\n", 21);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
+		exit(EXIT_FAILURE);
+	}
+	data->pid = fork();
+	if (data->pid == -1)
+	{
+		write(1, "Fork() problem.\n", 16);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
+		exit(EXIT_FAILURE);
+	}
+	if (data->pid == 0)
+	{
+		if (in_fd == -1)
+		{
+			close(data->end[0]);
+			write(2, "The infile does not exist.\n", 27);
+			ft_free(data->potential_path, get_lenght(data->potential_path));
+			exit(EXIT_FAILURE);
+		}
+		if (dup2_more(in_fd, 0) == -1)
+		{
+			write(2, "Dup2() problem.\n", 16);
+			ft_free(data->potential_path, get_lenght(data->potential_path));
+			exit(EXIT_FAILURE);
+		}
+		pass_command(data, av[2]);
+	}
+	else
+	{
+		if (close(data->end[1]) == -1)
+		{
+			write(1, "Close() problem.\n", 17);
+			ft_free(data->potential_path, get_lenght(data->potential_path));
+			exit(EXIT_FAILURE);
+		}
+		if (dup2_more(data->end[0], 0) == -1)
+		{
+			write(2, "Unexpected error[3].\n", 21);
+			ft_free(data->potential_path, get_lenght(data->potential_path));
+			exit(EXIT_FAILURE);
+		}
+	}
 }
 
 void	pipex_end(t_process *data, char **av, int out_fd, int ac)
@@ -92,7 +151,7 @@ void	pipex_middle(int index, int ac,t_process *data, char **av)
 	{
 		if (pipe(data->end) == -1)
 		{
-			write(1, "Pipe() problem\n.", 16);
+			write(1, "Pipe() problem.\n", 16);
 			ft_free(data->potential_path, get_lenght(data->potential_path));
 			exit(EXIT_FAILURE);
 		}
@@ -256,7 +315,6 @@ void ff()
 
 int main(int ac, char **av, char **env)
 {
-	int			in_fd;
 	int			out_fd;
 	int			index;
 	t_process	data;
@@ -279,27 +337,8 @@ int main(int ac, char **av, char **env)
 		heredocing_time(ac, av[2], &data);
 	}
 	else
-	{
-		index = 2;
-		in_fd = valid_file(av[1], 0);
-		out_fd = valid_file(av[ac - 1], 1);
-		if (in_fd == -1 || out_fd == -1)
-		{
-			write(2, "Unexpected error[2].\n", 21);
-			ft_free(data.potential_path, get_lenght(data.potential_path));
-			exit(EXIT_FAILURE);
-		}
-		/*when the infile does not exist , an error is printed and only the last command is executed
-		use a special pipex_end() that read from the stdin and executes
-		*/
-		if (dup2_more(in_fd, 0) == -1)
-		{
-			write(2, "Dup2() problem.\n", 16);
-			ft_free(data.potential_path, get_lenght(data.potential_path));
-			exit(EXIT_FAILURE);
-		}
-	}
-	pipex_middle(index, ac, &data, av);
+		pipex_start(&data, av, ac, &out_fd);
+	pipex_middle(3, ac, &data, av);
 	pipex_end(&data, av, out_fd, ac);
 	return(0);
 }
