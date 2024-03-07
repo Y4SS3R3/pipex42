@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:15:38 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/06 12:58:02 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/07 11:15:34 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,22 @@ void	check_env(t_process *data, char **env)
 	data->envp = env;
 }
 
-// protect from unset PATH;
-
 void	pipex_end(t_process *data, char **av, int out_fd, int ac)
 {
+	char *tmp;
+
 	data->command = ft_split(av[ac - 2], ' ');
+	tmp = data->command[0];
 	data->command[0] = check_command(data->command[0], data->potential_path);
+	if (data->command[0] == NULL)
+	{
+		write(1, "Command not found.\n", 19);
+		ft_free(data->potential_path, get_lenght(data->potential_path));
+		ft_free(data->command, get_lenght(data->command));
+		exit(EXIT_FAILURE);
+	}
+	if (strcmp(data->command[0], tmp) != 0)
+		free(tmp);
 	data->pid = fork();
 	if (data->pid == -1)
 	{
@@ -105,7 +115,7 @@ void	pipex_middle(int index, int ac,t_process *data, char **av)
 			}
 			if (dup2_more(data->end[0], 0) == -1)
 			{
-				write(2, "Unexpected error[3].\n", 18);
+				write(2, "Unexpected error[3].\n", 21);
 				ft_free(data->potential_path, get_lenght(data->potential_path));
 				exit(EXIT_FAILURE);
 			}
@@ -225,7 +235,7 @@ void	heredocing_time(int ac, char *limiter, t_process *data)
 	if (dup2_more(fd, 0) == -1)
 	{
 		free(name);
-		write(2, "Unexpected error[1].\n", 18);
+		write(2, "Unexpected error[1].\n", 21);
 		ft_free(data->potential_path, get_lenght(data->potential_path));
 		exit(EXIT_FAILURE);
 	}
@@ -241,7 +251,7 @@ void	heredocing_time(int ac, char *limiter, t_process *data)
 
 void ff()
 {
-	system("leaks pipex_bonus");
+	system("lsof -c pipex_bonus");
 }
 
 int main(int ac, char **av, char **env)
@@ -251,7 +261,7 @@ int main(int ac, char **av, char **env)
 	int			index;
 	t_process	data;
 
-	atexit(ff);
+	// atexit(ff);
 	if (ac < 5 && ft_strcmp(av[1], "here_doc") != 0)
 		arg_error();
 	check_env(&data, env);
@@ -275,10 +285,13 @@ int main(int ac, char **av, char **env)
 		out_fd = valid_file(av[ac - 1], 1);
 		if (in_fd == -1 || out_fd == -1)
 		{
-			write(2, "Unexpected error[2].\n", 18);
+			write(2, "Unexpected error[2].\n", 21);
 			ft_free(data.potential_path, get_lenght(data.potential_path));
 			exit(EXIT_FAILURE);
 		}
+		/*when the infile does not exist , an error is printed and only the last command is executed
+		use a special pipex_end() that read from the stdin and executes
+		*/
 		if (dup2_more(in_fd, 0) == -1)
 		{
 			write(2, "Dup2() problem.\n", 16);

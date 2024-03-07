@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 16:07:35 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/04 15:55:44 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:33:37 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int		get_lenght(char **array);
 size_t	ft_strcmp(char *s1, char *s2);
 char	*ft_itoa(int n);
 int		dup2_more(int old, int new);
-int		fork_plus();
 void	pass_command(t_process *data, char *command_av);
 void	last_child(t_process *data, int out_fd);
 #endif

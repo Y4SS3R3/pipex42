@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:53 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/06 12:56:25 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/06 16:20:53 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ char	*create_path(char **paths, char *command)
 		free(result);
 		i++;
 	}
-	// free(command);
 	return (NULL);
 }
 
