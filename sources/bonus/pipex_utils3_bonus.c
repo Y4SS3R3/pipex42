@@ -1,16 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   pipex_utils3_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/04 12:45:21 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/02/20 15:25:22 by ymassiou         ###   ########.fr       */
+/*   Created: 2024/03/08 19:33:51 by ymassiou          #+#    #+#             */
+/*   Updated: 2024/03/10 16:53:17 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
+
+int	get_length(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (*array)
+	{
+		i++;
+		array++;
+	}
+	return (i);
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	if (s == NULL)
+		return ;
+	if (fd >= 0)
+	{
+		while (*s)
+			write(fd, s++, 1);
+	}
+}
 
 char	*ft_substr(const char *s, unsigned int start, size_t len)
 {
@@ -35,4 +59,26 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 	}
 	result[len] = 0;
 	return (result);
+}
+
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	if (len == 0 && haystack == NULL)
+		return (NULL);
+	if (needle[i] == 0)
+		return ((char *)haystack);
+	while (haystack[i] && i < len)
+	{
+		j = 0;
+		while (needle[j] == haystack[i + j] && i + j < len && haystack[i + j])
+			j++;
+		if (needle[j] == 0)
+			return ((char *)&haystack[i]);
+		i++;
+	}
+	return (NULL);
 }

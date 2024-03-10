@@ -6,49 +6,68 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:59 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/03 22:35:22 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:53:17 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	execute_child(t_process *child, int *end, char **env,
-		void (*child_do)(char *, int *, char **, char **))
+void ff()
+{
+	system("leaks pipex");
+}
+
+void	execute_child(t_process *child, int *end, t_process *data,
+		void (child_do)(t_process *, int *, t_process *))
 {
 	child->pid = fork();
 	if (child->pid == -1)
 		errno_protocol();
 	if (!child->pid)
-		child_do(child->path, end, child->command, env);
+		child_do(child, end, data);
 }
 
 int	main(int ac, char **av, char **env)
 {
-	char		**potential_path;
 	int			end[2];
+	int			flag;
 	t_process	child1;
 	t_process	child2;
+	t_process	data;
 
-	if (ac < 5)
+	flag = 0;
+	if (ac != 5)
+	{
+		ft_putstr_fd("Wrong number of argumens!\n", 2);
+		ft_putstr_fd("->Usage: ./pipex INFILE cmd1 cmd2 OUTFILE\n", 2);
 		exit(EXIT_FAILURE);
+	}
+	check_env(&data, env);
+	check_potential_path(&data);
 	child1.path = av[1];
 	child2.path = av[4];
 	child1.command = ft_split(av[2], ' ');
 	child2.command = ft_split(av[3], ' ');
-	potential_path = ft_split(extract_path(env), ':');
-	child1.command[0] = check_command(child1.command[0], potential_path);
-	child2.command[0] = check_command(child2.command[0], potential_path);
+	child1.tmp = child1.command[0];
+	child2.tmp = child2.command[0];
+	child1.command[0] = check_command(child1.command[0],data.potential_path, &flag);
+	child2.command[0] = check_command(child2.command[0], data.potential_path, &flag);
+	if (ft_strcmp(child1.tmp, child1.command[0]) != 0 && flag != 0)
+		free(child1.tmp);
+	if (ft_strcmp(child2.tmp, child2.command[0]) != 0 && flag != 0)
+		free(child2.tmp);
 	if (pipe(end) == -1)
-		errno_protocol();
-	execute_child(&child1, end, env, child1_do);
-	execute_child(&child2, end, env, child2_do);
-	end_it(end, potential_path, child1.command, child2.command);
+	{
+		ft_putstr_fd("Problem with pipe().\n", 2);
+		ft_free(data.potential_path, get_length(data.potential_path));
+		ft_free(child1.command, get_length(child1.command));
+		ft_free(child2.command, get_length(child2.command));
+		exit(EXIT_FAILURE);
+	}
+	execute_child(&child1, end, &data, child1_do);
+	execute_child(&child2, end, &data, child2_do);
+	end_it(end, data.potential_path, child1.command, child2.command);
 	while (wait(NULL) != -1)
 		;
 	return (0);
 }
-// dup2(old, new);
-/*
-what ever 'old' is connected to duplicate it and make 'new' connected to it too
-so when i use 'new' it will take to me to stream that 'old' points to too
-*/

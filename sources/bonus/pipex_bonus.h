@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 16:07:35 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/07 20:09:01 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/10 20:58:06 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,14 @@
 # include <string.h>
 # include <limits.h>
 
-#define BUFFER_SIZE 42
-
 typedef struct s_process
 {
-	char	*path;
 	char	**envp;
 	char	**command;
 	int		pid;
-	int		fd;
+	int		out_fd;
+	int		in_fd;
+	int		here_doc_fd;
 	int		end[2];
 	char	**potential_path;
 }		t_process;
@@ -46,18 +45,37 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 char	*ft_strdup(const char *s1);
 char	*create_path(char **paths, char *command);
-char	*check_command(char *command, char **paths);
+char	*check_command(char *command, char **paths, int *flag);
 char	*get_env(char **env);
 char	*extract_path(char **env);
 int		valid_file(char *path, int in_or_out);
 void	*ft_free(char **to_free, size_t elements);
-void	errno_protocol(void);
 int		get_next_line(char **line);
-int		get_lenght(char **array);
+int		get_length(char **array);
 size_t	ft_strcmp(char *s1, char *s2);
 char	*ft_itoa(int n);
 int		dup2_more(int old, int new);
-void	pass_command(t_process *data, char *command_av);
 void	last_child(t_process *data, int out_fd);
 void	ft_putstr_fd(char *s, int fd);
+void	error_ii(char *message, t_process *data, char *to_free);
+void	error_iii(char *message, char *to_free1,
+			t_process *data, char *to_free2);
+void	error_iv(char *message, t_process *data);
+void	error_v(char *message, t_process *data);
+int		find_limiter(char *limiter, char *line, char *tmp);
+void	fill_heredoc(char *limiter, int hrdc_fd, t_process *data);
+char	*randomize_file_name(void);
+void	hrdc_arg_error(void);
+void	heredocing_time(int ac, char *limiter, t_process *data);
+void	arg_error(void);
+void	check_potential_path(t_process *data);
+void	check_env(t_process *data, char **env);
+void	close_both(t_process *data, int out_fd);
+void	last_child(t_process *data, int out_fd);
+void	pass_command(t_process *data, char *command_av);
+int		dup2_more(int old, int new);
+void	last_free(t_process *data);
+void	close_both(t_process *data, int out_fd);
+void	finish_it(t_process *data, int out_fd);
+
 #endif

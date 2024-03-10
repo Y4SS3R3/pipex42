@@ -1,16 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   paths_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/24 14:21:53 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/10 17:04:02 by ymassiou         ###   ########.fr       */
+/*   Created: 2024/03/08 16:08:49 by ymassiou          #+#    #+#             */
+/*   Updated: 2024/03/10 13:46:50 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
+
+void	arg_error(void)
+{
+	write(2, "	->Programm needs 5 arguments at least.\n", 40);
+	exit(EXIT_FAILURE);
+}
+
+void	check_potential_path(t_process *data)
+{
+	char	*res;
+
+	res = extract_path(data->envp);
+	if (res == NULL)
+	{
+		write(2, "PATH variable not found\n", 24);
+		exit(EXIT_FAILURE);
+	}
+	data->potential_path = ft_split(res, ':');
+}
+
+void	check_env(t_process *data, char **env)
+{
+	if (*env == NULL)
+	{
+		write(2, "Error in environment\n", 21);
+		exit(EXIT_FAILURE);
+	}
+	data->envp = env;
+}
 
 char	*create_path(char **paths, char *command)
 {
@@ -33,7 +62,6 @@ char	*create_path(char **paths, char *command)
 		free(result);
 		i++;
 	}
-	free(command);
 	return (NULL);
 }
 
@@ -62,40 +90,4 @@ char	*check_command(char *command, char **paths, int *flag)
 			result = command;
 	}
 	return (result);
-}
-
-char	*get_env(char **env)
-{
-	while (*env)
-	{
-		if (ft_strnstr(*env, "PATH", 5) != NULL)
-			return (*env);
-		env++;
-	}
-	return (NULL);
-}
-
-char	*extract_path(char **env)
-{
-	char	*str;
-
-	str = get_env(env);
-	if (str == NULL)
-		return (NULL);
-	while (*str != '=')
-		str++;
-	return (str + 1);
-}
-
-int	valid_file(char *path, int in_or_out)
-{
-	int	fd;
-
-	if (in_or_out == 0)
-		fd = open(path, O_RDONLY, 0644);
-	else if (in_or_out == 1)
-		fd = open(path, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	else
-		fd = open(path, O_WRONLY | O_APPEND | O_CREAT, 0644);
-	return (fd);
 }

@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 18:47:16 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/02 15:57:59 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/10 15:39:24 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,10 @@ static int	words_count(const char *s, char c)
 	}
 	return (count);
 }
+
+/*
+handle tabs
+*/
 
 char	**ft_split(char const *s, char c)
 {
