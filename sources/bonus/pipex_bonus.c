@@ -6,30 +6,29 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:15:38 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/10 22:43:23 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/11 15:50:01 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	first_child(int in_fd, t_process *data, char *first_command)
+void	first_child(t_process *data, char *first_command)
 {
-	if (in_fd == -1)
+	if (data->in_fd == -1)
 	{
 		close(data->end[0]);
 		close(data->end[1]);
 		close(data->out_fd);
 		error_iv("The infile does not exist.\n", data);
 	}
-	if (dup2_more(in_fd, 0) == -1)
+	if (dup2_more(data->in_fd, 0) == -1)
 	{
 		close(data->end[0]);
 		close(data->end[1]);
 		close(data->out_fd);
-		close(data->in_fd);
 		error_iv("Dup2() problem.\n", data);
 	}
-	pass_command(data, first_command);// <-------------------
+	pass_command1(data, first_command);
 }
 
 void	pipex_start(t_process *data, char **av, int ac)
@@ -55,15 +54,16 @@ void	pipex_start(t_process *data, char **av, int ac)
 		error_iv("Fork() problem.\n", data); // close in_fd and out_fd
 	}
 	if (data->pid == 0)
-		first_child(data->in_fd, data, av[2]);
+		first_child(data, av[2]);
 	else
 	{
 		if (close(data->end[1]) == -1)
 			error_iv("Close(1) problem.\n", data);
 		if (dup2_more(data->end[0], 0) == -1)
 			error_iv("Unexpected error[3].\n", data);
-		if (in_fd != -1 && close(in_fd) == -1)
+		if (data->in_fd != -1)
 			error_iv("Close(2) problem.\n", data);
+		close(data->in_fd);/*can turn into a problem later*/
 	}
 }
 
@@ -103,9 +103,14 @@ void	pipex_middle(int ac, t_process *data, char **av)
 			error_iv("Pipe() problem.\n", data);
 		data->pid = fork();
 		if (data->pid == -1)
+		{
+			close(data->end[0]);
+			close(data->end[1]);
+			close(data->out_fd);
 			error_iv("Fork() problem.\n", data);
+		}
 		if (data->pid == 0)
-			pass_command(data, av[index]);
+			pass_command2(data, av[index]);// <-------------------
 		else
 		{
 			if (close(data->end[1]) == -1)
