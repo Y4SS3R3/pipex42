@@ -35,7 +35,7 @@ SRC_BONUS =	sources/bonus/error_utils_bonus.c \
 OBJS_BONUS = $(SRC_BONUS:%.c=%.o)
 OBJS = $(SRC:%.c=%.o)
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g
 RM = rm -f
 INCS = -I ./includes
 HEADER = pipex.h

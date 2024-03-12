@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <limits.h>
+#define SIZE_T_MAX 100000
 
 typedef struct s_process
 {

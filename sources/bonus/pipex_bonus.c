@@ -39,18 +39,25 @@ void	pipex_start(t_process *data, char **av, int ac)
 	data->out_fd = valid_file(av[ac - 1], 1);
 	if (data->out_fd == -1)
 	{
-		close(data->end[0]);
-		close(data->end[1]);
-		close(data->in_fd);
+		if (close(data->end[0]) == -1)
+			write(2, "1\n", 2);
+		if (close(data->end[1]) == -1)
+			write(2, "2\n", 2);
+		if (close(data->in_fd) == -1)
+			write(2, "3\n", 2);
 		error_iv("File cannot be opened.\n", data);
 	}
 	data->pid = fork();
 	if (data->pid == -1)
 	{
-		close(data->end[0]);
-		close(data->end[1]);
-		close(data->in_fd);
-		close(data->out_fd);
+		if (close(data->end[0]) == -1)
+			write(2, "4\n", 2);
+		if (close(data->end[1]) == -1)
+			write(2, "5\n", 2);
+		if (close(data->in_fd) == -1)
+			write(2, "6\n", 2);
+		if (close(data->out_fd) == -1)
+			write(2, "7\n", 2);
 		error_iv("Fork() problem.\n", data);
 	}
 	if (data->pid == 0)
@@ -60,7 +67,8 @@ void	pipex_start(t_process *data, char **av, int ac)
 		close(data->end[1]);
 		if (dup2_more(data->end[0], 0) == -1)
 			error_iv("Unexpected error[3].\n", data);
-		close(data->in_fd);/*can turn into a problem later*/
+		if (data->in_fd != -1)
+			close(data->in_fd);
 	}
 }
 

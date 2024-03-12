@@ -92,10 +92,10 @@ int	valid_file(char *path, int in_or_out)
 	int	fd;
 
 	if (in_or_out == 0)
-		fd = open(path, O_RDONLY, 0644);
+		fd = open(path, O_RDONLY, 0666);
 	else if (in_or_out == 1)
-		fd = open(path, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+		fd = open(path, O_WRONLY | O_TRUNC | O_CREAT, 0666);
 	else
-		fd = open(path, O_WRONLY | O_APPEND | O_CREAT, 0644);
+		fd = open(path, O_WRONLY | O_APPEND | O_CREAT, 0666);
 	return (fd);
 }

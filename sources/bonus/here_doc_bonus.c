@@ -78,7 +78,7 @@ char	*randomize_file_name(void)
 
 	i = 0;
 	name = NULL;
-	while (i < OPEN_MAX)
+	while (i < FOPEN_MAX)
 	{
 		name = ft_itoa(i);
 		tmp = name;
