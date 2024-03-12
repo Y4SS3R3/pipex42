@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 16:07:35 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/10 20:58:06 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/12 12:14:39 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,19 @@ void	error_iii(char *message, char *to_free1,
 void	error_iv(char *message, t_process *data);
 void	error_v(char *message, t_process *data);
 int		find_limiter(char *limiter, char *line, char *tmp);
-void	fill_heredoc(char *limiter, int hrdc_fd, t_process *data);
+void	fill_heredoc(char *limiter, t_process *data, char *name);
 char	*randomize_file_name(void);
 void	hrdc_arg_error(void);
 void	heredocing_time(int ac, char *limiter, t_process *data);
 void	arg_error(void);
 void	check_potential_path(t_process *data);
 void	check_env(t_process *data, char **env);
-void	close_both(t_process *data, int out_fd);
+void	close_both(t_process *data);
 void	last_child(t_process *data, int out_fd);
-void	pass_command(t_process *data, char *command_av);
+void	pass_command1(t_process *data, char *command_av);
+void	pass_command2(t_process *data, char *command_av);
 int		dup2_more(int old, int new);
 void	last_free(t_process *data);
-void	close_both(t_process *data, int out_fd);
-void	finish_it(t_process *data, int out_fd);
+void	finish_it(t_process *data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 18:36:50 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/11 15:50:20 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/12 12:12:15 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,9 @@
 void	last_child(t_process *data, int out_fd)
 {
 	if (dup2_more(out_fd, 1) == -1)
-	{
-		write(2, "Unexpected error[4].\n", 21);
-		ft_free(data->potential_path, get_length(data->potential_path));
-		ft_free(data->command, get_length(data->command));
-		exit(EXIT_FAILURE);
-	}
+		error_v("Unexpected error[4].\n", data);
 	if (execve(data->command[0], data->command, data->envp) == -1)
-	{
-		write(2, "Execve() error.\n", 16);
-		ft_free(data->potential_path, get_length(data->potential_path));
-		ft_free(data->command, get_length(data->command));
-		exit(EXIT_FAILURE);
-	}
+		error_v("Execve() error.\n", data);
 }
 
 void	pass_command1(t_process *data, char *command_av)
@@ -39,8 +29,6 @@ void	pass_command1(t_process *data, char *command_av)
 	close(data->end[0]);
 	if (dup2_more(data->end[1], 1) == -1)
 	{
-		close(data->end[0]);
-		close(data->in_fd);
 		close(data->out_fd);
 		error_iv("Dup2() problem.\n", data);
 	}
@@ -52,15 +40,11 @@ void	pass_command1(t_process *data, char *command_av)
 		free(tmp);
 	if (data->command[0] == NULL)
 	{
-		close(data->end[0]);
-		close(data->in_fd);
 		close(data->out_fd);
 		error_v("Command not found.\n", data);
 	}
 	if (execve(data->command[0], data->command, data->envp) == -1)
 	{
-		close(data->end[0]);
-		close(data->in_fd);
 		close(data->out_fd);
 		error_v("Execve() error.\n", data); // CLOSE FD 0 / 1 / INFILE / OUTFILE / NAME
 	}
@@ -74,7 +58,6 @@ void	pass_command2(t_process *data, char *command_av)
 	close(data->end[0]);
 	if (dup2_more(data->end[1], 1) == -1)
 	{
-		close(data->end[0]);
 		close(data->out_fd);
 		error_iv("Dup2() problem.\n", data);
 	}
@@ -86,15 +69,13 @@ void	pass_command2(t_process *data, char *command_av)
 		free(tmp);
 	if (data->command[0] == NULL)
 	{
-		close(data->end[0]);
 		close(data->out_fd);
 		error_v("Command not found.\n", data);
 	}
 	if (execve(data->command[0], data->command, data->envp) == -1)
 	{
-		close(data->end[0]);
 		close(data->out_fd);
-		error_v("Execve() error.\n", data); // CLOSE FD 0 / 1 / INFILE / OUTFILE / NAME
+		error_v("Execve() error.\n", data);
 	}
 }
 
@@ -115,10 +96,8 @@ void	last_free(t_process *data)
 	ft_free(data->command, get_length(data->command));
 }
 
-void	close_both(t_process *data, int out_fd)
+void	close_both(t_process *data)
 {
-	if (close(0) == -1)
-		error_v("Close() error.\n", data);
-	if (close(out_fd) == -1)
-		error_v("Close() error.\n", data);
+	close(0);
+	close(data->out_fd);
 }

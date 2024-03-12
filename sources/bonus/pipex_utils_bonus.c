@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:53 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/10 17:04:02 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/12 12:12:03 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ int	valid_file(char *path, int in_or_out)
 	return (fd);
 }
 
-void	finish_it(t_process *data, int out_fd)
+void	finish_it(t_process *data)
 {
-	close_both(data, out_fd);
+	close_both(data);
 	while (wait(NULL) != -1)
 		;
 	last_free(data);

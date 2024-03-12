@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:15:38 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/11 15:50:01 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/12 12:30:38 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	pipex_start(t_process *data, char **av, int ac)
 		close(data->end[0]);
 		close(data->end[1]);
 		close(data->in_fd);
-		error_iv("File cannot be opened.\n", data); //close in_fd
+		error_iv("File cannot be opened.\n", data);
 	}
 	data->pid = fork();
 	if (data->pid == -1)
@@ -51,18 +51,15 @@ void	pipex_start(t_process *data, char **av, int ac)
 		close(data->end[1]);
 		close(data->in_fd);
 		close(data->out_fd);
-		error_iv("Fork() problem.\n", data); // close in_fd and out_fd
+		error_iv("Fork() problem.\n", data);
 	}
 	if (data->pid == 0)
 		first_child(data, av[2]);
 	else
 	{
-		if (close(data->end[1]) == -1)
-			error_iv("Close(1) problem.\n", data);
+		close(data->end[1]);
 		if (dup2_more(data->end[0], 0) == -1)
 			error_iv("Unexpected error[3].\n", data);
-		if (data->in_fd != -1)
-			error_iv("Close(2) problem.\n", data);
 		close(data->in_fd);/*can turn into a problem later*/
 	}
 }
@@ -81,15 +78,21 @@ void	pipex_end(t_process *data, char **av, int out_fd, int ac)
 		free(tmp);
 	data->pid = fork();
 	if (data->pid == -1)
+	{
+		close(data->out_fd);
 		error_v("Fork() error.\n", data);
+	}
 	if (data->pid == 0)
 	{
 		if (data->command[0] == NULL)
+		{
+			close(data->out_fd);
 			error_v("Command not found.\n", data);
+		}
 		last_child(data, out_fd);
 	}
 	else
-		finish_it(data, out_fd);
+		finish_it(data);
 }
 
 void	pipex_middle(int ac, t_process *data, char **av)
@@ -110,13 +113,15 @@ void	pipex_middle(int ac, t_process *data, char **av)
 			error_iv("Fork() problem.\n", data);
 		}
 		if (data->pid == 0)
-			pass_command2(data, av[index]);// <-------------------
+			pass_command2(data, av[index]);
 		else
 		{
-			if (close(data->end[1]) == -1)
-				error_iv("Close() problem.\n", data);
+			close(data->end[1]);
 			if (dup2_more(data->end[0], 0) == -1)
+			{
+				close(data->out_fd);
 				error_iv("Unexpected error[3].\n", data);
+			}
 		}
 		index++;
 	}
@@ -144,6 +149,6 @@ int	main(int ac, char **av, char **env)
 	else
 		pipex_start(&data, av, ac);
 	pipex_middle(ac, &data, av);
-	pipex_end(&data, av, data.out_fd, ac);
+	pipex_end(&data, av, data.out_fd, ac);// <-------------------
 	return (0);
 }
