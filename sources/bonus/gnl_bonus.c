@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/04 15:06:52 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/08 16:44:15 by ymassiou         ###   ########.fr       */
+/*   Created: 2024/03/13 13:52:24 by ymassiou          #+#    #+#             */
+/*   Updated: 2024/03/13 14:47:31 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,17 @@ int	check_eof(int bytes, char *to_free)
 int	get_next_line(char **line)
 {
 	char	*buffer;
+	char	*buffer_more;
 	int		readed;
 	int		i;
+	int		allocate;
 	char	c;
 
 	i = 0;
+	allocate = 10000;
 	readed = 0;
-	buffer = (char *)malloc(10000);
-	if (!buffer)
+	buffer = (char *)malloc(allocate);
+	if (buffer == NULL)
 		return (-1);
 	readed = read(0, &c, 1);
 	while (readed && c != '\n' && c != '\0')
@@ -37,6 +40,15 @@ int	get_next_line(char **line)
 		if (c != '\n' && c != '\0')
 			buffer[i] = c;
 		i++;
+		if (i > allocate - 1)
+		{
+			allocate = i + 1000;
+			buffer_more = malloc(allocate);
+			if (buffer_more == NULL)
+				return (-1);
+			buffer_more = ft_memcpy(buffer_more, buffer, i);
+			// free(buffer);
+		}
 		readed = read(0, &c, 1);
 	}
 	if (check_eof(readed, buffer) == 0)
