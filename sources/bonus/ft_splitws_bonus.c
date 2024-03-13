@@ -1,31 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_bonus.c                                   :+:      :+:    :+:   */
+/*   ft_splitws_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 18:47:16 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/13 12:15:19 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:15:36 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-static char	*gen_word(const char *s, char c)
+static int	ft_isspace(char c)
+{
+	if ((c >= 9 && c <= 13) || c == ' ')
+		return (1);
+	return (0);
+}
+
+static char	*gen_word(const char *s)
 {
 	size_t	i;
 	char	*result;
 
 	result = NULL;
 	i = 0;
-	while (s[i] && s[i] != c)
+	while (s[i] && !ft_isspace(s[i]))
 		i++;
 	result = ft_substr(s, 0, i);
 	return (result);
 }
 
-static int	words_count(const char *s, char c)
+static int	words_count(const char *s)
 {
 	size_t	i;
 	size_t	count;
@@ -34,14 +41,14 @@ static int	words_count(const char *s, char c)
 	count = 0;
 	while (s[i])
 	{
-		if (s[i] != c && (s[i + 1] == 0 || s[i + 1] == c))
+		if (!ft_isspace(s[i]) && (s[i + 1] == 0 || ft_isspace(s[i + 1])))
 			count++;
 		i++;
 	}
 	return (count);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_splitws(char const *s)
 {
 	size_t	words;
 	char	**result;
@@ -49,7 +56,7 @@ char	**ft_split(char const *s, char c)
 
 	if (s == NULL)
 		return (NULL);
-	words = words_count(s, c);
+	words = words_count(s);
 	result = NULL;
 	j = 0;
 	result = (char **)malloc((words + 1) * sizeof(char *));
@@ -57,13 +64,13 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	while (*s && words--)
 	{
-		while (*s == c && *s)
+		while (ft_isspace(*s) && *s)
 			s++;
-		result[j] = gen_word(s, c);
+		result[j] = gen_word(s);
 		if (result[j] == NULL)
 			return (ft_free(result, j));
 		j++;
-		while (*s != c && *s)
+		while (!ft_isspace(*s) && *s)
 			s++;
 	}
 	result[j] = 0;

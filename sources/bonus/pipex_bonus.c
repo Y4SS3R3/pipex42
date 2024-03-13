@@ -6,11 +6,20 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:15:38 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/12 12:30:38 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:16:15 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+void f()
+{
+	system("lsof -c pipex_bonus");
+}
+void l()
+{
+	system("leaks pipex_bonus");
+}
 
 void	first_child(t_process *data, char *first_command)
 {
@@ -78,7 +87,7 @@ void	pipex_end(t_process *data, char **av, int out_fd, int ac)
 	int		flag;
 
 	flag = 0;
-	data->command = ft_split(av[ac - 2], ' ');
+	data->command = ft_splitws(av[ac - 2]);
 	tmp = data->command[0];
 	data->command[0] = check_command(data->command[0],
 			data->potential_path, &flag);
@@ -139,6 +148,9 @@ int	main(int ac, char **av, char **env)
 {
 	t_process	data;
 
+	// atexit(f);
+	// write(1, "<<<<<<<------------------------------------>>>>>>>>\n", 52);
+	// atexit(l);
 	if (ac < 5 && ft_strcmp(av[1], "here_doc") != 0)
 		arg_error();
 	check_env(&data, env);
@@ -157,6 +169,6 @@ int	main(int ac, char **av, char **env)
 	else
 		pipex_start(&data, av, ac);
 	pipex_middle(ac, &data, av);
-	pipex_end(&data, av, data.out_fd, ac);// <-------------------
+	pipex_end(&data, av, data.out_fd, ac);
 	return (0);
 }

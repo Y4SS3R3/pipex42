@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 18:36:50 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/12 12:12:15 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:11:11 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	pass_command1(t_process *data, char *command_av)
 		close(data->out_fd);
 		error_iv("Dup2() problem.\n", data);
 	}
-	data->command = ft_split(command_av, ' ');
+	data->command = ft_splitws(command_av);
 	tmp = data->command[0];
 	data->command[0] = check_command(data->command[0],
 			data->potential_path, &flag);
@@ -61,7 +61,7 @@ void	pass_command2(t_process *data, char *command_av)
 		close(data->out_fd);
 		error_iv("Dup2() problem.\n", data);
 	}
-	data->command = ft_split(command_av, ' ');
+	data->command = ft_splitws(command_av);
 	tmp = data->command[0];
 	data->command[0] = check_command(data->command[0],
 			data->potential_path, &flag);
@@ -96,8 +96,8 @@ void	last_free(t_process *data)
 	ft_free(data->command, get_length(data->command));
 }
 
-void	close_both(t_process *data)
-{
-	close(0);
-	close(data->out_fd);
-}
+// void	close_both(t_process *data)
+// {
+// 	close(0);
+// 	close(data->out_fd);
+// }

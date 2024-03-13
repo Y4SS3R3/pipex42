@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 16:07:35 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/12 12:14:39 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:10:10 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <limits.h>
-#define SIZE_T_MAX 100000
 
 typedef struct s_process
 {
@@ -34,6 +33,7 @@ typedef struct s_process
 	char	**potential_path;
 }		t_process;
 
+char	**ft_splitws(char const *s);
 char	**ft_split(char const *s, char c);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
 size_t	ft_strlen(const char *s);
@@ -66,12 +66,11 @@ void	error_v(char *message, t_process *data);
 int		find_limiter(char *limiter, char *line, char *tmp);
 void	fill_heredoc(char *limiter, t_process *data, char *name);
 char	*randomize_file_name(void);
-void	hrdc_arg_error(void);
+void	hrdc_arg_error(t_process *data);
 void	heredocing_time(int ac, char *limiter, t_process *data);
 void	arg_error(void);
 void	check_potential_path(t_process *data);
 void	check_env(t_process *data, char **env);
-void	close_both(t_process *data);
 void	last_child(t_process *data, int out_fd);
 void	pass_command1(t_process *data, char *command_av);
 void	pass_command2(t_process *data, char *command_av);

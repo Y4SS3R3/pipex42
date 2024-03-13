@@ -6,7 +6,7 @@
 #    By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/24 14:29:45 by ymassiou          #+#    #+#              #
-#    Updated: 2024/03/10 14:30:46 by ymassiou         ###   ########.fr        #
+#    Updated: 2024/03/13 12:13:20 by ymassiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,13 +29,14 @@ SRC_BONUS =	sources/bonus/error_utils_bonus.c \
 			sources/bonus/paths_bonus.c \
 			sources/bonus/pipex_utils2_bonus.c \
 			sources/bonus/ft_split_bonus.c \
+			sources/bonus/ft_splitws_bonus.c \
 			sources/bonus/lib_utils2_bonus.c \
 			sources/bonus/pipex_bonus.c \
 			sources/bonus/pipex_utils3_bonus.c
 OBJS_BONUS = $(SRC_BONUS:%.c=%.o)
 OBJS = $(SRC:%.c=%.o)
 CC = cc
-CFLAGS = -g
+CFLAGS = -Wall -Wextra -Werror -g
 RM = rm -f
 INCS = -I ./includes
 HEADER = pipex.h
@@ -47,7 +48,7 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 %.o: %.c $(HEADER)
-	$(CC) -Wall -Wextra -Werror -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 bonus: $(NAME_BONUS)
 
@@ -55,7 +56,7 @@ $(NAME_BONUS): $(OBJS_BONUS)
 	$(CC) $(CFLAGS) $(OBJS_BONUS) -o $(NAME_BONUS)
 
 %.o: %.c $(HEADER_BONUS)
-	$(CC) -Wall -Wextra -Werror -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(OBJS) $(OBJS_BONUS)

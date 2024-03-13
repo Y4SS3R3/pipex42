@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:50:31 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/10 20:48:00 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/13 11:32:56 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,14 @@ char	*randomize_file_name(void)
 	return (NULL);
 }
 
-void	hrdc_arg_error(void)
+void	hrdc_arg_error(t_process *data)
 {
 	char	*m;
 
 	m = "->Usage: ./pipex_bonus here_doc LIMITER cmd1 cmd2 cmd3 ... OUTFILE.\n";
 	write(2, "->here_doc needs 6 arguments at least.\n", 40);
 	write(2, m, 69);
+	close(data->out_fd);
 	exit(EXIT_FAILURE);
 }
 
@@ -107,7 +108,7 @@ void	heredocing_time(int ac, char *limiter, t_process *data)
 	char	*name;
 
 	if (ac < 6)
-		hrdc_arg_error();
+		hrdc_arg_error(data);
 	name = randomize_file_name();
 	data->here_doc_fd = open(name, O_CREAT | O_TRUNC | O_RDWR, 0644);
 	if (data->here_doc_fd == -1)

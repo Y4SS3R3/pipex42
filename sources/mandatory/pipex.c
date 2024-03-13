@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:59 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/10 16:53:17 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/13 12:11:38 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int	main(int ac, char **av, char **env)
 	check_potential_path(&data);
 	child1.path = av[1];
 	child2.path = av[4];
-	child1.command = ft_split(av[2], ' ');
-	child2.command = ft_split(av[3], ' ');
+	child1.command = ft_splitws(av[2]);
+	child2.command = ft_splitws(av[3]);
 	child1.tmp = child1.command[0];
 	child2.tmp = child2.command[0];
 	child1.command[0] = check_command(child1.command[0],data.potential_path, &flag);
