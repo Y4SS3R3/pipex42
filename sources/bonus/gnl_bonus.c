@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 13:52:24 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/13 14:47:31 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/13 17:05:54 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	get_next_line(char **line)
 {
 	char	*buffer;
 	char	*buffer_more;
+	char	*tmp;
 	int		readed;
 	int		i;
 	int		allocate;
@@ -42,12 +43,14 @@ int	get_next_line(char **line)
 		i++;
 		if (i > allocate - 1)
 		{
-			allocate = i + 1000;
+			allocate = i + 100;
 			buffer_more = malloc(allocate);
+			tmp = buffer;
 			if (buffer_more == NULL)
 				return (-1);
 			buffer_more = ft_memcpy(buffer_more, buffer, i);
-			// free(buffer);
+			buffer = buffer_more;
+			free(tmp);
 		}
 		readed = read(0, &c, 1);
 	}

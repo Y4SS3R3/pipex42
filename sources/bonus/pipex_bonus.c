@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:15:38 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/13 12:16:15 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/13 17:03:15 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ int	main(int ac, char **av, char **env)
 
 	// atexit(f);
 	// write(1, "<<<<<<<------------------------------------>>>>>>>>\n", 52);
-	// atexit(l);
+	atexit(l);
 	if (ac < 5 && ft_strcmp(av[1], "here_doc") != 0)
 		arg_error();
 	check_env(&data, env);
