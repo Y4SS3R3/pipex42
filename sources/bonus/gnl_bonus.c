@@ -6,13 +6,13 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 13:52:24 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/14 11:46:41 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/14 12:23:19 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-char	*update_size(int old_size, char *old_buffer, int *allocate)
+static char	*update_size(int old_size, char *old_buffer, int *allocate)
 {
 	char	*tmp;
 	char	*new_buffer;
@@ -28,7 +28,30 @@ char	*update_size(int old_size, char *old_buffer, int *allocate)
 	return (old_buffer);
 }
 
-int	check_eof(int bytes, char *to_free)
+static char	*fill_buffer(char *buffer, int *readed, int *i)
+{
+	int		allocate;
+	char	c;
+
+	allocate = 10000;
+	*readed = read(0, &c, 1);
+	while (*readed && c != '\n' && c != '\0')
+	{
+		if (c != '\n' && c != '\0')
+			buffer[*i] = c;
+		(*i)++;
+		if (*i > allocate - 1)
+		{
+			buffer = update_size(*i, buffer, &allocate);
+			if (buffer == NULL)
+				return (buffer);
+		}
+		*readed = read(0, &c, 1);
+	}
+	return (buffer);
+}
+
+static int	check_eof(int bytes, char *to_free)
 {
 	if (bytes == 0)
 		free(to_free);
@@ -41,7 +64,6 @@ int	get_next_line(char **line)
 	int		readed;
 	int		i;
 	int		allocate;
-	char	c;
 
 	i = 0;
 	allocate = 10000;
@@ -49,22 +71,11 @@ int	get_next_line(char **line)
 	buffer = (char *)malloc(allocate);
 	if (buffer == NULL)
 		return (-1);
-	readed = read(0, &c, 1);
-	while (readed && c != '\n' && c != '\0')
-	{
-		if (c != '\n' && c != '\0')
-			buffer[i] = c;
-		i++;
-		if (i > allocate - 1)
-		{
-			buffer = update_size(i, buffer, &allocate);
-			if (buffer == NULL)
-				return (-1);
-		}
-		readed = read(0, &c, 1);
-	}
+	buffer = fill_buffer(buffer, &readed, &i);
+	if (buffer == NULL)
+		return (-1);
 	if (check_eof(readed, buffer) == 0)
-		return (check_eof(readed, buffer));
+		return (0);
 	buffer[i] = '\n';
 	buffer[++i] = '\0';
 	*line = buffer;

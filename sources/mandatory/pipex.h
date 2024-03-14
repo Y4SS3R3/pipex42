@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:11:56 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/10 16:53:17 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/14 12:25:46 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <limits.h>
-#define SIZE_T_MAX 100000
 
 typedef struct s_process
 {
@@ -60,4 +59,5 @@ void	check_env(t_process *data, char **env);
 void	check_potential_path(t_process *data);
 void	ft_putstr_fd(char *s, int fd);
 size_t	ft_strcmp(char *s1, char *s2);
+char	**ft_splitws(char const *s);
 #endif

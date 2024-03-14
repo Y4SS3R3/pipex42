@@ -6,7 +6,7 @@
 #    By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/24 14:29:45 by ymassiou          #+#    #+#              #
-#    Updated: 2024/03/13 13:53:10 by ymassiou         ###   ########.fr        #
+#    Updated: 2024/03/14 12:25:21 by ymassiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ SRC = sources/mandatory/ft_split.c \
 		sources/mandatory/pipex.c \
 		sources/mandatory/pipex_utils.c \
 		sources/mandatory/child_do.c \
-		sources/mandatory/pipex_utils2.c
+		sources/mandatory/pipex_utils2.c \
+		sources/mandatory/ft_splitws.c
 
 SRC_BONUS =	sources/bonus/error_utils_bonus.c \
 			sources/bonus/gnl_bonus.c \

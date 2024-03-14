@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:21:02 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/10 16:53:17 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/14 12:33:35 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	child1_do(t_process *child1, int *p_fds, t_process *data)
 	fd = valid_file(child1->path, 0);
 	if (fd == -1)
 	{
+		close(p_fds[0]);
+		close(p_fds[1]);
 		ft_putstr_fd("Infile cannot be opened.\n", 2);
 		ft_free(data->potential_path, get_length(data->potential_path));
 		ft_free(child1->command, get_length(child1->command));
@@ -45,6 +47,8 @@ void	child2_do(t_process *child2, int *p_fds, t_process *data)
 	fd = valid_file(child2->path, 1);
 	if (fd == -1)
 	{
+		close(p_fds[0]);
+		close(p_fds[1]);
 		ft_putstr_fd("Outfile cannot be opened.\n", 2);
 		ft_free(data->potential_path, get_length(data->potential_path));
 		ft_free(child2->command, get_length(child2->command));

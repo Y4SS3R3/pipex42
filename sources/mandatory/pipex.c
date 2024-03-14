@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:59 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/13 12:11:38 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/14 12:27:36 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void ff()
 {
-	system("leaks pipex");
+	system("lsof -c pipex");
 }
 
 void	execute_child(t_process *child, int *end, t_process *data,
@@ -35,6 +35,7 @@ int	main(int ac, char **av, char **env)
 	t_process	child2;
 	t_process	data;
 
+	atexit(ff);
 	flag = 0;
 	if (ac != 5)
 	{
