@@ -6,11 +6,27 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 13:52:24 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/13 17:05:54 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/14 11:46:41 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+char	*update_size(int old_size, char *old_buffer, int *allocate)
+{
+	char	*tmp;
+	char	*new_buffer;
+
+	*allocate = old_size + 100;
+	new_buffer = malloc(*allocate);
+	tmp = old_buffer;
+	if (new_buffer == NULL)
+		return (NULL);
+	new_buffer = ft_memcpy(new_buffer, old_buffer, old_size);
+	old_buffer = new_buffer;
+	free(tmp);
+	return (old_buffer);
+}
 
 int	check_eof(int bytes, char *to_free)
 {
@@ -22,8 +38,6 @@ int	check_eof(int bytes, char *to_free)
 int	get_next_line(char **line)
 {
 	char	*buffer;
-	char	*buffer_more;
-	char	*tmp;
 	int		readed;
 	int		i;
 	int		allocate;
@@ -43,19 +57,14 @@ int	get_next_line(char **line)
 		i++;
 		if (i > allocate - 1)
 		{
-			allocate = i + 100;
-			buffer_more = malloc(allocate);
-			tmp = buffer;
-			if (buffer_more == NULL)
+			buffer = update_size(i, buffer, &allocate);
+			if (buffer == NULL)
 				return (-1);
-			buffer_more = ft_memcpy(buffer_more, buffer, i);
-			buffer = buffer_more;
-			free(tmp);
 		}
 		readed = read(0, &c, 1);
 	}
 	if (check_eof(readed, buffer) == 0)
-		return (0);
+		return (check_eof(readed, buffer));
 	buffer[i] = '\n';
 	buffer[++i] = '\0';
 	*line = buffer;
