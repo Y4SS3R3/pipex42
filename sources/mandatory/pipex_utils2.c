@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 20:22:43 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/16 01:00:00 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/16 05:44:45 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	pass_command(t_process *data, char *command_av)
 		error_iv("Dup2() problem.\n", data);
 	}
 	data->command = ft_splitws(command_av);
+	if (data->command == NULL)
+		error_i(data, "Unexpected error[2].\n");
 	tmp = data->command[0];
 	data->command[0] = check_command(data->command[0],
 			data->potential_path, &flag);

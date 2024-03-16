@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:11:56 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/16 02:04:23 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/16 05:35:05 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	error_iv(char *message, t_process *data);
 void	error_iii(char *message, char *to_free1,
 			t_process *data, char *to_free2);
 void	error_ii(char *message, t_process *data, char *to_free);
+void	error_i(t_process *data, char *message);
 void	first_child(t_process *data, char *first_command);
 int		dup2_more(int old, int new);
 void	last_child(t_process *data);
