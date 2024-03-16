@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:11:56 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/16 22:19:37 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/16 22:39:43 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <limits.h>
-
-#define malloc(x) 0
 
 typedef struct s_process
 {

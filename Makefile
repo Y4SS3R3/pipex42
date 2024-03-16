@@ -6,7 +6,7 @@
 #    By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/24 14:29:45 by ymassiou          #+#    #+#              #
-#    Updated: 2024/03/16 02:03:44 by ymassiou         ###   ########.fr        #
+#    Updated: 2024/03/16 22:43:04 by ymassiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ SRC_BONUS =	sources/bonus/error_utils_bonus.c \
 OBJS_BONUS = $(SRC_BONUS:%.c=%.o)
 OBJS = $(SRC:%.c=%.o)
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = 
 RM = rm -f
 INCS = -I ./includes
 HEADER = sources/mandatory/pipex.h

@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 16:07:35 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/16 05:22:28 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/16 22:42:50 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <stdlib.h>
 # include <string.h>
 # include <limits.h>
+
+#define malloc(x) 0
 
 typedef struct s_process
 {
@@ -80,5 +82,6 @@ void	custom_error2(char *message, t_process *data);
 void	custom_error3(char *message, t_process *data, char *name, char *line);
 void	custom_error4(t_process *data, char *tmp, char *line, char *name);
 void	custom_error5(t_process *data, char *message);
+void	custom_error6(t_process *data, char *message);
 
 #endif
