@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:20:24 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/16 05:43:39 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/16 22:15:54 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	pipex_end(t_process *data, char **av, int ac)
 	flag = 0;
 	data->command = ft_splitws(av[ac - 2]);
 	if (data->command == NULL)
-		error_i(data, "Unexpected error[2].\n");
+		custom_error6(data, "Unexpected error[2].\n");
 	tmp = data->command[0];
 	data->command[0] = check_command(data->command[0],
 			data->potential_path, &flag);
