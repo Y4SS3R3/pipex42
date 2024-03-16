@@ -1,42 +1,72 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/24 14:21:59 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/14 12:27:36 by ymassiou         ###   ########.fr       */
+/*   Created: 2024/03/14 13:20:24 by ymassiou          #+#    #+#             */
+/*   Updated: 2024/03/15 22:24:36 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void ff()
+void	pipex_start(t_process *data, char **av, int ac)
 {
-	system("lsof -c pipex");
+	if (pipe(data->end) == -1)
+		return (close(data->out_fd), error_iv("Pipe() problem.\n", data));
+	data->in_fd = valid_file(av[1], 0);
+	data->out_fd = valid_file(av[ac - 1], 1);
+	if (data->out_fd == -1)
+		custom_error1("File cannot be opened.\n", data);
+	data->pid = fork();
+	if (data->pid == -1)
+	{
+		close(data->out_fd);
+		custom_error1("Fork() problem.\n", data);
+	}
+	if (data->pid == 0)
+		first_child(data, av[2]);
+	else
+	{
+		close(data->end[1]);
+		if (dup2_more(data->end[0], 0) == -1)
+			error_iv("Unexpected error[3].\n", data);
+		if (data->in_fd != -1)
+			close(data->in_fd);
+	}
 }
 
-void	execute_child(t_process *child, int *end, t_process *data,
-		void (child_do)(t_process *, int *, t_process *))
+void	pipex_end(t_process *data, char **av, int ac)
 {
-	child->pid = fork();
-	if (child->pid == -1)
-		errno_protocol();
-	if (!child->pid)
-		child_do(child, end, data);
+	char	*tmp;
+	int		flag;
+
+	flag = 0;
+	data->command = ft_splitws(av[ac - 2]);
+	tmp = data->command[0];
+	data->command[0] = check_command(data->command[0],
+			data->potential_path, &flag);
+	if (ft_strcmp(data->command[0], tmp) > 0 && flag != 0)
+		free(tmp);
+	data->pid = fork();
+	if (data->pid == -1)
+		custom_error2("Fork() error.\n", data);
+	if (data->pid == 0)
+	{
+		if (data->command[0] == NULL)
+			custom_error2("Command not found.\n", data);
+		last_child(data);
+	}
+	else
+		finish_it(data);
 }
 
 int	main(int ac, char **av, char **env)
 {
-	int			end[2];
-	int			flag;
-	t_process	child1;
-	t_process	child2;
 	t_process	data;
 
-	atexit(ff);
-	flag = 0;
 	if (ac != 5)
 	{
 		ft_putstr_fd("Wrong number of argumens!\n", 2);
@@ -45,30 +75,7 @@ int	main(int ac, char **av, char **env)
 	}
 	check_env(&data, env);
 	check_potential_path(&data);
-	child1.path = av[1];
-	child2.path = av[4];
-	child1.command = ft_splitws(av[2]);
-	child2.command = ft_splitws(av[3]);
-	child1.tmp = child1.command[0];
-	child2.tmp = child2.command[0];
-	child1.command[0] = check_command(child1.command[0],data.potential_path, &flag);
-	child2.command[0] = check_command(child2.command[0], data.potential_path, &flag);
-	if (ft_strcmp(child1.tmp, child1.command[0]) != 0 && flag != 0)
-		free(child1.tmp);
-	if (ft_strcmp(child2.tmp, child2.command[0]) != 0 && flag != 0)
-		free(child2.tmp);
-	if (pipe(end) == -1)
-	{
-		ft_putstr_fd("Problem with pipe().\n", 2);
-		ft_free(data.potential_path, get_length(data.potential_path));
-		ft_free(child1.command, get_length(child1.command));
-		ft_free(child2.command, get_length(child2.command));
-		exit(EXIT_FAILURE);
-	}
-	execute_child(&child1, end, &data, child1_do);
-	execute_child(&child2, end, &data, child2_do);
-	end_it(end, data.potential_path, child1.command, child2.command);
-	while (wait(NULL) != -1)
-		;
+	pipex_start(&data, av, ac);
+	pipex_end(&data, av, ac);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 11:11:03 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/10 11:53:38 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/14 15:45:32 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,38 +97,14 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 	return (NULL);
 }
 
-char	*ft_substr(const char *s, unsigned int start, size_t len)
+size_t	ft_strcmp(char *s1, char *s2)
 {
 	size_t	i;
-	char	*result;
 
-	if (s == NULL)
-		return (NULL);
-	if (start > ft_strlen(s))
-		return ((char *)ft_calloc(1, 1));
-	if (len > ft_strlen(&s[start]))
-		len = ft_strlen(&s[start]);
+	if (s1 == NULL || s2 == NULL)
+		return (0);
 	i = 0;
-	result = NULL;
-	result = (char *)malloc(len + 1);
-	if (result == NULL)
-		return (NULL);
-	while (i < len)
-	{
-		result[i] = s[start + i];
+	while (s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
-	}
-	result[len] = 0;
-	return (result);
-}
-
-void	ft_putstr_fd(char *s, int fd)
-{
-	if (s == NULL)
-		return ;
-	if (fd >= 0)
-	{
-		while (*s)
-			write(fd, s++, 1);
-	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

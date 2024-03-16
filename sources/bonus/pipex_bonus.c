@@ -6,20 +6,11 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:15:38 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/13 17:03:15 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/16 01:00:05 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-void f()
-{
-	system("lsof -c pipex_bonus");
-}
-void l()
-{
-	system("leaks pipex_bonus");
-}
 
 void	first_child(t_process *data, char *first_command)
 {
@@ -37,7 +28,7 @@ void	first_child(t_process *data, char *first_command)
 		close(data->out_fd);
 		error_iv("Dup2() problem.\n", data);
 	}
-	pass_command1(data, first_command);
+	pass_command(data, first_command);
 }
 
 void	pipex_start(t_process *data, char **av, int ac)
@@ -47,27 +38,12 @@ void	pipex_start(t_process *data, char **av, int ac)
 	data->in_fd = valid_file(av[1], 0);
 	data->out_fd = valid_file(av[ac - 1], 1);
 	if (data->out_fd == -1)
-	{
-		if (close(data->end[0]) == -1)
-			write(2, "1\n", 2);
-		if (close(data->end[1]) == -1)
-			write(2, "2\n", 2);
-		if (close(data->in_fd) == -1)
-			write(2, "3\n", 2);
-		error_iv("File cannot be opened.\n", data);
-	}
+		custom_error1("File cannot be opened.\n", data);
 	data->pid = fork();
 	if (data->pid == -1)
 	{
-		if (close(data->end[0]) == -1)
-			write(2, "4\n", 2);
-		if (close(data->end[1]) == -1)
-			write(2, "5\n", 2);
-		if (close(data->in_fd) == -1)
-			write(2, "6\n", 2);
-		if (close(data->out_fd) == -1)
-			write(2, "7\n", 2);
-		error_iv("Fork() problem.\n", data);
+		close(data->out_fd);
+		custom_error1("Fork() problem.\n", data);
 	}
 	if (data->pid == 0)
 		first_child(data, av[2]);
@@ -81,7 +57,7 @@ void	pipex_start(t_process *data, char **av, int ac)
 	}
 }
 
-void	pipex_end(t_process *data, char **av, int out_fd, int ac)
+void	pipex_end(t_process *data, char **av, int ac)
 {
 	char	*tmp;
 	int		flag;
@@ -95,18 +71,12 @@ void	pipex_end(t_process *data, char **av, int out_fd, int ac)
 		free(tmp);
 	data->pid = fork();
 	if (data->pid == -1)
-	{
-		close(data->out_fd);
-		error_v("Fork() error.\n", data);
-	}
+		custom_error2("Fork() error.\n", data);
 	if (data->pid == 0)
 	{
 		if (data->command[0] == NULL)
-		{
-			close(data->out_fd);
-			error_v("Command not found.\n", data);
-		}
-		last_child(data, out_fd);
+			custom_error2("Command not found.\n", data);
+		last_child(data);
 	}
 	else
 		finish_it(data);
@@ -123,14 +93,9 @@ void	pipex_middle(int ac, t_process *data, char **av)
 			error_iv("Pipe() problem.\n", data);
 		data->pid = fork();
 		if (data->pid == -1)
-		{
-			close(data->end[0]);
-			close(data->end[1]);
-			close(data->out_fd);
-			error_iv("Fork() problem.\n", data);
-		}
+			custom_error5(data, "Fork() problem.\n");
 		if (data->pid == 0)
-			pass_command2(data, av[index]);
+			pass_command(data, av[index]);
 		else
 		{
 			close(data->end[1]);
@@ -148,9 +113,6 @@ int	main(int ac, char **av, char **env)
 {
 	t_process	data;
 
-	// atexit(f);
-	// write(1, "<<<<<<<------------------------------------>>>>>>>>\n", 52);
-	atexit(l);
 	if (ac < 5 && ft_strcmp(av[1], "here_doc") != 0)
 		arg_error();
 	check_env(&data, env);
@@ -169,6 +131,6 @@ int	main(int ac, char **av, char **env)
 	else
 		pipex_start(&data, av, ac);
 	pipex_middle(ac, &data, av);
-	pipex_end(&data, av, data.out_fd, ac);
+	pipex_end(&data, av, ac);
 	return (0);
 }

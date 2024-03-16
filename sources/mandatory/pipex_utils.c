@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 14:21:53 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/10 17:04:02 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/15 22:24:36 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,10 @@ int	valid_file(char *path, int in_or_out)
 	int	fd;
 
 	if (in_or_out == 0)
-		fd = open(path, O_RDONLY, 0666);
+		fd = open(path, O_RDONLY, 0644);
 	else if (in_or_out == 1)
-		fd = open(path, O_WRONLY | O_TRUNC | O_CREAT, 0666);
+		fd = open(path, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	else
-		fd = open(path, O_WRONLY | O_APPEND | O_CREAT, 0666);
+		fd = open(path, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	return (fd);
 }

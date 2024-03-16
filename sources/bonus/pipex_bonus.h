@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 16:07:35 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/13 13:53:23 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/16 02:03:35 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ int		get_next_line(char **line);
 int		get_length(char **array);
 size_t	ft_strcmp(char *s1, char *s2);
 char	*ft_itoa(int n);
-int		dup2_more(int old, int new);
-void	last_child(t_process *data, int out_fd);
+void	last_child(t_process *data);
 void	ft_putstr_fd(char *s, int fd);
 void	error_ii(char *message, t_process *data, char *to_free);
 void	error_iii(char *message, char *to_free1,
@@ -71,11 +70,15 @@ void	heredocing_time(int ac, char *limiter, t_process *data);
 void	arg_error(void);
 void	check_potential_path(t_process *data);
 void	check_env(t_process *data, char **env);
-void	last_child(t_process *data, int out_fd);
-void	pass_command1(t_process *data, char *command_av);
-void	pass_command2(t_process *data, char *command_av);
+void	pass_command(t_process *data, char *command_av);
 int		dup2_more(int old, int new);
 void	last_free(t_process *data);
 void	finish_it(t_process *data);
+void	free_both(char *tmp, char *line);
+void	custom_error1(char *message, t_process *data);
+void	custom_error2(char *message, t_process *data);
+void	custom_error3(char *message, t_process *data, char *name, char *line);
+void	custom_error4(t_process *data, char *tmp, char *line, char *name);
+void	custom_error5(t_process *data, char *message);
 
 #endif
