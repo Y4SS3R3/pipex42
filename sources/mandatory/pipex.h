@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:11:56 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/16 22:39:43 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 00:56:34 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ typedef struct s_process
 	int		pid;
 	int		out_fd;
 	int		in_fd;
-	int		here_doc_fd;
 	int		end[2];
 	char	**potential_path;
 }		t_process;

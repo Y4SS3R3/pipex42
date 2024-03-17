@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:37:20 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/16 22:37:53 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 00:52:18 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	error_v(char *message, t_process *data)
 {
 	ft_putstr_fd(message, 2);
-	if(data->potential_path)
+	if (data->potential_path)
 		ft_free(data->potential_path, get_length(data->potential_path));
 	if (data->command)
 		ft_free(data->command, get_length(data->command));
@@ -25,7 +25,7 @@ void	error_v(char *message, t_process *data)
 void	error_iv(char *message, t_process *data)
 {
 	ft_putstr_fd(message, 2);
-	if(data->potential_path)
+	if (data->potential_path)
 		ft_free(data->potential_path, get_length(data->potential_path));
 	exit(EXIT_FAILURE);
 }
@@ -41,7 +41,7 @@ void	error_ii(char *message, t_process *data, char *to_free)
 {
 	free(to_free);
 	ft_putstr_fd(message, 2);
-	if(data->potential_path)
+	if (data->potential_path)
 		ft_free(data->potential_path, get_length(data->potential_path));
 	exit(EXIT_FAILURE);
 }
