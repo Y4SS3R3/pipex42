@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:04:35 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/14 17:07:24 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 05:36:21 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*randomize_file_name(void)
 
 	i = 0;
 	name = NULL;
-	while (i < FOPEN_MAX)
+	while (i < OPEN_MAX)
 	{
 		name = ft_itoa(i);
 		tmp = name;

@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 16:07:35 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/17 03:56:56 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 05:34:55 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,9 @@
 # define PIPEX_BONUS_H
 
 # include <unistd.h>
-# include <stdio.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <stdlib.h>
-# include <string.h>
 # include <limits.h>
 
 typedef struct s_process
