@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 16:07:35 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/17 00:53:50 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 03:56:56 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_process
 	int		pid;
 	int		out_fd;
 	int		in_fd;
+	int		special;
 	int		here_doc_fd;
 	int		end[2];
 	char	**potential_path;
@@ -50,7 +51,7 @@ char	*check_command(char *command, char **paths, int *flag);
 char	*get_env(char **env);
 char	*extract_path(char **env);
 int		valid_file(char *path, int in_or_out);
-void	*ft_free(char **to_free, size_t elements);
+void	*ft_free(char **to_free, size_t elements, int flag);
 int		get_next_line(char **line);
 int		get_length(char **array);
 size_t	ft_strcmp(char *s1, char *s2);
@@ -66,7 +67,7 @@ int		find_limiter(char *limiter, char *line, char *tmp);
 void	fill_heredoc(char *limiter, t_process *data, char *name);
 char	*randomize_file_name(void);
 void	hrdc_arg_error(t_process *data);
-void	heredocing_time(int ac, char *limiter, t_process *data);
+void	use_here_doc(int ac, char *limiter, t_process *data);
 void	arg_error(void);
 void	check_potential_path(t_process *data);
 void	check_env(t_process *data, char **env);

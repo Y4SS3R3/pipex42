@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 19:33:51 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/13 12:15:28 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 03:57:56 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,26 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 	return (NULL);
 }
 
-void	*ft_free(char **to_free, size_t elements)
+void	*ft_free(char **to_free, size_t elements, int flag)
 {
 	size_t	i;
 
-	i = 0;
-	while (i < elements)
+	i = flag;
+	if (i == 1)
 	{
-		free(to_free[i]);
-		i++;
+		while (to_free[i] != NULL)
+		{
+			free(to_free[i]);
+			i++;
+		}
+	}
+	else
+	{
+		while (i < elements)
+		{
+			free(to_free[i]);
+			i++;
+		}
 	}
 	free(to_free);
 	return (NULL);

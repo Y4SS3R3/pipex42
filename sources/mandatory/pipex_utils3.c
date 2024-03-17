@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 14:44:57 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/16 22:24:19 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 03:18:07 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,8 @@ int	get_length(char **array)
 	int	i;
 
 	i = 0;
-	while (*array)
-	{
+	while (array[i])
 		i++;
-		array++;
-	}
 	return (i);
 }
 

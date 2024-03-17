@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 18:47:16 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/14 12:26:00 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 03:23:49 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	**ft_splitws(char const *s)
 			s++;
 		result[j] = gen_word(s);
 		if (result[j] == NULL)
-			return (ft_free(result, j));
+			return (ft_free(result, j, 0));
 		j++;
 		while (!ft_isspace(*s) && *s)
 			s++;

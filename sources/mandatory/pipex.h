@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:11:56 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/17 00:56:34 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 03:22:15 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_process
 	int		pid;
 	int		out_fd;
 	int		in_fd;
+	int		special;
 	int		end[2];
 	char	**potential_path;
 }		t_process;
@@ -49,7 +50,7 @@ char	*check_command(char *command, char **paths, int *flag);
 char	*get_env(char **env);
 char	*extract_path(char **env);
 int		valid_file(char *path, int in_or_out);
-void	*ft_free(char **to_free, size_t elements);
+void	*ft_free(char **to_free, size_t elements, int flag);
 int		get_length(char **array);
 void	check_env(t_process *data, char **env);
 void	check_potential_path(t_process *data);

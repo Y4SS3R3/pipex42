@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:20:24 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/16 22:15:54 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 03:55:19 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,18 @@ void	pipex_end(t_process *data, char **av, int ac)
 	tmp = data->command[0];
 	data->command[0] = check_command(data->command[0],
 			data->potential_path, &flag);
+	if (data->command[0] == NULL)
+	{
+		data->special = 1;
+		custom_error2("Command not found.\n", data);
+	}
 	if (ft_strcmp(data->command[0], tmp) > 0 && flag != 0)
 		free(tmp);
 	data->pid = fork();
 	if (data->pid == -1)
 		custom_error2("Fork() error.\n", data);
 	if (data->pid == 0)
-	{
-		if (data->command[0] == NULL)
-			custom_error2("Command not found.\n", data);
 		last_child(data);
-	}
 	else
 		finish_it(data);
 }
@@ -69,6 +70,7 @@ int	main(int ac, char **av, char **env)
 {
 	t_process	data;
 
+	data.special = 0;
 	if (ac != 5)
 	{
 		ft_putstr_fd("Wrong number of argumens!\n", 2);

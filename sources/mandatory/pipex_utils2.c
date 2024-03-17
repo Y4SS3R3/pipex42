@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 20:22:43 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/16 22:24:19 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 03:23:32 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,6 @@ void	pass_command(t_process *data, char *command_av)
 
 void	last_free(t_process *data)
 {
-	ft_free(data->potential_path, get_length(data->potential_path));
-	ft_free(data->command, get_length(data->command));
+	ft_free(data->potential_path, get_length(data->potential_path), 0);
+	ft_free(data->command, get_length(data->command), 0);
 }

@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 18:47:16 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/10 15:39:24 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 03:47:56 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,26 @@ static char	*gen_word(const char *s, char c)
 	return (result);
 }
 
-void	*ft_free(char **to_free, size_t elements)
+void	*ft_free(char **to_free, size_t elements, int flag)
 {
 	size_t	i;
 
-	i = 0;
-	while (i < elements)
+	i = flag;
+	if (i == 1)
 	{
-		free(to_free[i]);
-		i++;
+		while (to_free[i] != NULL)
+		{
+			free(to_free[i]);
+			i++;
+		}
+	}
+	else
+	{
+		while (i < elements)
+		{
+			free(to_free[i]);
+			i++;
+		}
 	}
 	free(to_free);
 	return (NULL);
@@ -79,7 +90,7 @@ char	**ft_split(char const *s, char c)
 			s++;
 		result[j] = gen_word(s, c);
 		if (result[j] == NULL)
-			return (ft_free(result, j));
+			return (ft_free(result, j, 0));
 		j++;
 		while (*s != c && *s)
 			s++;

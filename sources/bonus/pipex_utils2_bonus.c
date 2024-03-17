@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 18:36:50 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/17 00:55:04 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 03:36:11 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ int	dup2_more(int old, int new)
 
 void	last_free(t_process *data)
 {
-	ft_free(data->potential_path, get_length(data->potential_path));
-	ft_free(data->command, get_length(data->command));
+	ft_free(data->potential_path, get_length(data->potential_path), 0);
+	ft_free(data->command, get_length(data->command), 0);
 }
 
 // void	close_both(t_process *data)

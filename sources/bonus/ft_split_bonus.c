@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 18:47:16 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/13 12:15:19 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 03:35:41 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	**ft_split(char const *s, char c)
 			s++;
 		result[j] = gen_word(s, c);
 		if (result[j] == NULL)
-			return (ft_free(result, j));
+			return (ft_free(result, j, 0));
 		j++;
 		while (*s != c && *s)
 			s++;

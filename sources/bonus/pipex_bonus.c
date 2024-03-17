@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:15:38 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/17 00:53:41 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 03:56:43 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,18 @@ void	pipex_end(t_process *data, char **av, int ac)
 	tmp = data->command[0];
 	data->command[0] = check_command(data->command[0],
 			data->potential_path, &flag);
+	if (data->command[0] == NULL)
+	{
+		data->special = 1;
+		custom_error2("Command not found.\n", data);
+	}
 	if (ft_strcmp(data->command[0], tmp) > 0 && flag != 0)
 		free(tmp);
 	data->pid = fork();
 	if (data->pid == -1)
 		custom_error2("Fork() error.\n", data);
 	if (data->pid == 0)
-	{
-		if (data->command[0] == NULL)
-			custom_error2("Command not found.\n", data);
 		last_child(data);
-	}
 	else
 		finish_it(data);
 }
@@ -115,7 +116,6 @@ int	main(int ac, char **av, char **env)
 {
 	t_process	data;
 
-	atexit(ff);
 	if (ac < 5 && ft_strcmp(av[1], "here_doc") != 0)
 		arg_error();
 	check_env(&data, env);
@@ -126,10 +126,10 @@ int	main(int ac, char **av, char **env)
 		if (data.out_fd == -1)
 		{
 			write(2, "Problem opening the outfile when here_doc is used\n", 50);
-			ft_free(data.potential_path, get_length(data.potential_path));
+			ft_free(data.potential_path, get_length(data.potential_path), 0);
 			exit(EXIT_FAILURE);
 		}
-		heredocing_time(ac, av[2], &data);
+		use_here_doc(ac, av[2], &data);
 	}
 	else
 		pipex_start(&data, av, ac);

@@ -6,7 +6,7 @@
 /*   By: ymassiou <ymassiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:50:31 by ymassiou          #+#    #+#             */
-/*   Updated: 2024/03/16 05:29:19 by ymassiou         ###   ########.fr       */
+/*   Updated: 2024/03/17 02:33:14 by ymassiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	fill_heredoc(char *limiter, t_process *data, char *name)
 	}
 }
 
-void	heredocing_time(int ac, char *limiter, t_process *data)
+void	use_here_doc(int ac, char *limiter, t_process *data)
 {
 	char	*name;
 
